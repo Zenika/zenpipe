@@ -1,0 +1,6 @@
+class Toto {
+
+    fun display(){
+
+    }
+}
