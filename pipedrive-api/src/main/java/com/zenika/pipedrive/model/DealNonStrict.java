@@ -13,6 +13,7 @@
 
 package com.zenika.pipedrive.model;
 
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -95,13 +96,31 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DealNonStrict.JSON_PROPERTY_OWNER_NAME,
   DealNonStrict.JSON_PROPERTY_CC_EMAIL,
   DealNonStrict.JSON_PROPERTY_ORG_HIDDEN,
-  DealNonStrict.JSON_PROPERTY_PERSON_HIDDEN
+  DealNonStrict.JSON_PROPERTY_PERSON_HIDDEN,
+  DealNonStrict.JSON_ACCOUNT_MANAGER
 })
 @JsonTypeName("dealNonStrict")
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2023-01-24T19:04:25.918485+01:00[Europe/Paris]")
 public class DealNonStrict {
   public static final String JSON_PROPERTY_ID = "id";
+
   private Integer id;
+
+  public static final String JSON_ACCOUNT_MANAGER = "e3605a045b0a8f245ba8f39aa040984fa136a6fb";
+  private HashMap<String, String> accountManager;
+
+
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "The array of deals")
+  @JsonProperty(JSON_ACCOUNT_MANAGER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public HashMap<String, String> getAccountManager() {
+    return accountManager;
+  }
+
+  public void setAccountManager(HashMap<String, String> accountManager) {
+    this.accountManager = accountManager;
+  }
 
   public static final String JSON_PROPERTY_CREATOR_USER_ID = "creator_user_id";
   private DealNonStrictAllOfCreatorUserId creatorUserId;

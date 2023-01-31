@@ -225,7 +225,7 @@ public interface DealFieldsApi extends ApiClient.Api {
    *   </ul>
    * @return FieldsResponse200
    */
-  @RequestLine("GET /dealFields?start={start}&limit={limit}")
+  @RequestLine("GET /dealFields?start={start}&limit={limit}&name={name}")
   @Headers({
   "Accept: application/json",
   })

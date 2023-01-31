@@ -13,6 +13,7 @@
 
 package com.zenika.pipedrive.model;
 
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -92,6 +93,41 @@ public class OrganizationItem {
   private Integer id;
 
   public static final String JSON_PROPERTY_COMPANY_ID = "company_id";
+
+  public static final String JSON_ACCOUNT_MANAGER = "e3605a045b0a8f245ba8f39aa040984fa136a6fb";
+  private HashMap<String, String> accountManager;
+
+  //
+  public static final String JSON_COMMERCIAL_TRAINING = "65ce8ba3355440b46602fd510c9d0eaedd441be7";
+  private HashMap<String, String> commercialTraining;
+
+  public static final String JSON_PORTFOLIO = "39fa372d6bd7a72582610dc42f63ece2a5386522";
+
+  private HashMap<String, String> portfolio;
+  public void setPortfolio(HashMap<String, String> portfolio) {
+    this.portfolio = portfolio;
+  }
+
+  public HashMap<String, String> getPortfolio() {
+    return portfolio;
+  }
+
+  public HashMap<String, String> getCommercialTraining() {
+    return commercialTraining;
+  }
+
+  public void setCommercialTraining(HashMap<String, String> commercialTraining) {
+    this.commercialTraining = commercialTraining;
+  }
+
+  public HashMap<String, String> getAccountManager() {
+    return accountManager;
+  }
+
+  public void setAccountManager(HashMap<String, String> accountManager) {
+    this.accountManager = accountManager;
+  }
+
   private Integer companyId;
 
   public static final String JSON_PROPERTY_OWNER_ID = "owner_id";

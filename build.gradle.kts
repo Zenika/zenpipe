@@ -13,6 +13,14 @@ repositories { // Sources of dependencies. See 2️⃣
 
 dependencies { // All the libraries you want to use. See 4️⃣
     // Copy dependencies' names after you find them in a repository
+    implementation(project("pipedrive-api"))
+    implementation(platform("io.github.openfeign:feign-bom:12.1"))
+    implementation("io.github.openfeign:feign-core")
+    // https://mvnrepository.com/artifact/io.github.openfeign/feign-gson
+
+    implementation("io.github.openfeign:feign-jackson:9.3.1")
+
+
     testImplementation(kotlin("test")) // The Kotlin test library
 }
 
