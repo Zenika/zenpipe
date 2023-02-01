@@ -97,7 +97,7 @@ public class GetOrganizationResponse200 {
   @JsonProperty(JSON_PROPERTY_DATA)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public OrganizationItem getData() {
+  public OrganizationItem getData()  {
     return data;
   }
 

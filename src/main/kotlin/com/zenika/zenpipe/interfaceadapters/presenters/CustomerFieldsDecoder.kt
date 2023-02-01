@@ -1,16 +1,15 @@
 package com.zenika.zenpipe.interfaceadapters.presenters
 
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
 import com.zenika.pipedrive.decoder.ZenJacksonDecoder
 import feign.Response
 import feign.Util
+import org.openapitools.jackson.nullable.JsonNullableModule
 import java.io.BufferedReader
 import java.lang.reflect.Type
 
-class CustomFieldsDecoder constructor() : ZenJacksonDecoder() {
-
-
-    // ajouter un constructeur qui prend en prametre une hashmap
+class CustomFieldsDecoder constructor(private val decoderConfig: DecoderConfig): ZenJacksonDecoder(mutableListOf(JsonNullableModule())) {
 
 
     override fun decode(response: Response?, type: Type?): Any? {
@@ -36,9 +35,10 @@ class CustomFieldsDecoder constructor() : ZenJacksonDecoder() {
 
         val jsonNode: JsonNode = mapper.readTree(reader)
 
-        val config = DecoderConfig.Builder(mapper).build().createConfig()
+        val config = decoderConfig.createConfig()
 
         var tmpResult = result
+
         config.forEach { item ->
             val fn = item.value
             val key = item.key

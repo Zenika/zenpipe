@@ -19,7 +19,7 @@ dependencies { // All the libraries you want to use. See 4️⃣
     // https://mvnrepository.com/artifact/io.github.openfeign/feign-gson
 
     implementation("io.github.openfeign:feign-jackson:9.3.1")
-
+    implementation("org.openapitools:jackson-databind-nullable:0.2.4")
 
     testImplementation(kotlin("test")) // The Kotlin test library
 }
