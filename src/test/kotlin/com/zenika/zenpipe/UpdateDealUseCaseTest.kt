@@ -1,11 +1,12 @@
 package com.zenika.zenpipe
 
 import com.zenika.zenpipe.domain.*
+import com.zenika.zenpipe.usecase.DealRepository
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 
-class UpdateDealUseCaseTest : DealRepository  {
+class UpdateDealUseCaseTest : DealRepository {
 
   private val updateDealUseCase : UpdateDealUseCase = UpdateDealUseCase()
 

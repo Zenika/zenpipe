@@ -1,6 +1,7 @@
 import com.zenika.pipedrive.api.DealsApi
 import com.zenika.pipedrive.invoker.ApiClient
 import com.zenika.pipedrive.model.GetDealResponse200
+import com.zenika.zenpipe.interfaceadapters.presenters.CustomFieldsDecoder
 import feign.Logger
 import feign.jackson.JacksonEncoder
 import org.junit.jupiter.api.AfterEach
