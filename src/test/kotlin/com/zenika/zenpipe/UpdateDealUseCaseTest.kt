@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Test
 class UpdateDealUseCaseTest : DealRepository {
 
   private val updateDealUseCase : UpdateDealUseCase = UpdateDealUseCase()
+  private val portfolio = Portfolio("portFolio", 1, mapOf())
+  private val commercialTraining = CommercialTraining("CT", 2, mapOf())
+  private val accountManagerTraining = AccountManagerTraining("AM", 3, mapOf())
 
   @Test
   fun givenDealAndDealUpdatedEvent_WhenUpdateEventWithoutOrganization_ThenDoNothing(){
@@ -28,9 +31,9 @@ class UpdateDealUseCaseTest : DealRepository {
   @Test
   fun givenDealAndDealUpdatedEvent_WhenUpdateEventWithOrganizationAndPortfolioIsPresent_ThenDoNotUpDatePortfolio(){
     //given
-    val current = Deal(OrganizationId("123"), Portfolio("toto"))
+    val current = Deal(OrganizationId("123"), portfolio)
     val dealUpdatedEvent = DealUpdatedEvent(current)
-    val expected = Deal(OrganizationId("123"), Portfolio("toto"))
+    val expected = Deal(OrganizationId("123"), portfolio)
 
     //when
 
@@ -47,7 +50,7 @@ class UpdateDealUseCaseTest : DealRepository {
     val organization = Organization(OrganizationId("123"))
     val current = Deal(organization.id)
     val dealUpdatedEvent = DealUpdatedEvent(current)
-    val expected = Deal(organization.id, Portfolio("portFolio"))
+    val expected = Deal(organization.id, portfolio)
 
     //when
     val actual : Deal? = updateDealUseCase.updateDealProperties(dealUpdatedEvent, organization = getOrganizationFromDeal(current))
@@ -76,9 +79,9 @@ class UpdateDealUseCaseTest : DealRepository {
   fun givenDealAndDealUpdateEvent_WhenUpdateEventWithOrganizationAndPipeLineIdEqualTwoAndCommercialTrainingIsPresent_ThenDoNothing(){
     //given
     val organization = Organization(OrganizationId("123"))
-    val current = Deal(organization.id,null, PipelineId("2"), CommercialTraining("toto"))
+    val current = Deal(organization.id,null, PipelineId("2"),commercialTraining)
     val dealUpdatedEvent = DealUpdatedEvent(current)
-    val expected = Deal(organization.id, null, PipelineId("2"), CommercialTraining("toto"))
+    val expected = Deal(organization.id, null, PipelineId("2"), commercialTraining)
 
     //when
     val actual : Deal? = updateDealUseCase.updateDealProperties(dealUpdatedEvent, organization = getOrganizationFromDeal(current))
@@ -93,7 +96,7 @@ class UpdateDealUseCaseTest : DealRepository {
     val organization = Organization(OrganizationId("123"))
     val current = Deal(organization.id,null, PipelineId("2"))
     val dealUpdatedEvent = DealUpdatedEvent(current)
-    val expected = Deal(organization.id, null, PipelineId("2"), CommercialTraining("commericalTraining"), AccountManagerTraining("account manager trainig"))
+    val expected = Deal(organization.id, null, PipelineId("2"), commercialTraining, accountManagerTraining)
 
     //when
     val actual : Deal? = updateDealUseCase.updateDealProperties(dealUpdatedEvent, organization = getOrganizationFromDeal(current))
@@ -107,10 +110,10 @@ class UpdateDealUseCaseTest : DealRepository {
     //given
     val organization = Organization(OrganizationId("123"))
     val current = Deal(organization.id,null, PipelineId("2"),
-            null, AccountManagerTraining("account manager"))
+            null, accountManagerTraining)
     val dealUpdatedEvent = DealUpdatedEvent(current)
     val expected = Deal(organization.id, null, PipelineId("2"),
-            CommercialTraining("commericalTraining"), AccountManagerTraining("account manager"))
+            commercialTraining, accountManagerTraining)
 
     //when
     val actual : Deal? = updateDealUseCase.updateDealProperties(dealUpdatedEvent, organization = getOrganizationFromDeal(current))
@@ -127,7 +130,7 @@ class UpdateDealUseCaseTest : DealRepository {
             null)
     val dealUpdatedEvent = DealUpdatedEvent(current)
     val expected = Deal(organization.id, null, PipelineId("2"),
-            CommercialTraining("commericalTraining"), AccountManagerTraining("account manager trainig"))
+           commercialTraining, accountManagerTraining)
 
     //when
     val actual : Deal? = updateDealUseCase.updateDealProperties(dealUpdatedEvent, organization = getOrganizationFromDeal(current))
@@ -137,8 +140,12 @@ class UpdateDealUseCaseTest : DealRepository {
   }
 
   override fun getOrganizationFromDeal(deal: Deal): Organization {
-    return Organization(OrganizationId("123"), Portfolio("portFolio"), CommercialTraining("commericalTraining"), AccountManagerTraining("account manager trainig"))
+    return Organization(OrganizationId("123"), portfolio, commercialTraining, accountManagerTraining)
 
+  }
+
+  override fun getDealById(dealId: Int): Deal {
+    TODO("Not yet implemented")
   }
 
 }

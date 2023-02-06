@@ -1,4 +1,4 @@
-package com.zenika.zenpipe.interfaceadapters.presenters
+package com.zenika.zenpipe.decoder
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
@@ -13,7 +13,6 @@ class CustomFieldsDecoder constructor(private val decoderConfig: DecoderConfig):
 
 
     override fun decode(response: Response?, type: Type?): Any? {
-
         if (response?.status() == 404 || response?.status() == 204)
             return Util.emptyValueOf(type)
         if (response?.body() == null)
@@ -42,8 +41,20 @@ class CustomFieldsDecoder constructor(private val decoderConfig: DecoderConfig):
         config.forEach { item ->
             val fn = item.value
             val key = item.key
-            tmpResult = fn(key, tmpResult, jsonNode)
+            tmpResult = fn(key, tmpResult, jsonNode, ::getCustomFields)
         }
         return tmpResult
+    }
+
+    private fun getCustomFields(
+            jsonNode: JsonNode,
+            customFieldKey: String
+    ): HashMap<String, String>? {
+        val typeReference: TypeReference<HashMap<String, String>> = object : TypeReference<HashMap<String, String>>() {}
+
+        return mapper?.convertValue(
+                jsonNode["data"][customFieldKey],
+                typeReference
+        )
     }
 }

@@ -30,15 +30,18 @@ class UpdateDealUseCase(){
                   if(dealUpdated.current.accountManagerTraining != null){
                       dealUpdate = dealUpdated.current
                   }else {
-                      dealUpdate = Deal(dealUpdated.current.organizationId, null, dealUpdated.current.pipelineId, dealUpdated.current.commercialTraining, dealUpdated.current.accountManagerTraining)
+                      dealUpdate = Deal(dealUpdated.current.organizationId, null, dealUpdated.current.pipelineId,
+                          dealUpdated.current.commercialTraining, dealUpdated.current.accountManagerTraining)
                   }
 
                 }else{
 
                     if(dealUpdated.current.accountManagerTraining != null){
-                        dealUpdate = Deal(dealUpdated.current.organizationId, null, dealUpdated.current.pipelineId, organization?.commercialTraining, dealUpdated.current.accountManagerTraining )
+                        dealUpdate = Deal(dealUpdated.current.organizationId, null, dealUpdated.current.pipelineId,
+                            organization?.commercialTraining, dealUpdated.current.accountManagerTraining )
                     } else {
-                        dealUpdate = Deal(dealUpdated.current.organizationId, null, dealUpdated.current.pipelineId, organization?.commercialTraining, organization?.accountManagerTraining)
+                        dealUpdate = Deal(dealUpdated.current.organizationId, null, dealUpdated.current.pipelineId,
+                            organization?.commercialTraining, organization?.accountManagerTraining)
                     }
 
                 }

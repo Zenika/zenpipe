@@ -1,4 +1,4 @@
-package com.zenika.zenpipe.interfaceadapters.presenters
+package com.zenika.zenpipe.decoder
 
 import com.zenika.pipedrive.model.GetDealResponse200
 

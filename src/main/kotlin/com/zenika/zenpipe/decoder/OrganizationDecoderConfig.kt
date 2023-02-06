@@ -1,4 +1,4 @@
-package com.zenika.zenpipe.interfaceadapters.presenters
+package com.zenika.zenpipe.decoder
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.zenika.pipedrive.model.GetOrganizationResponse200
@@ -9,7 +9,7 @@ class OrganizationDecoderConfig (
         private val customFieldAccountManagerKey: String,
         private val customFieldACommercialTrainingKey: String,
         private val customFieldPortfolioKey: String
-) : DecoderConfig{
+) : DecoderConfig {
 
     override fun createConfig(): Map<String, SetCustomFields> {
 
