@@ -1,4 +1,4 @@
-package com.zenika.zenpipe.domain
+package com.zenika.zenpipe.entities
 
 data class Organization(val id: OrganizationId? = null, val portfolio: Portfolio? = null,
                         val commercialTraining: CommercialTraining? = null,

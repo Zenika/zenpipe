@@ -1,9 +1,8 @@
 import com.zenika.pipedrive.api.DealsApi
 import com.zenika.pipedrive.invoker.ApiClient
 import com.zenika.pipedrive.model.UpdateDealRequest
-import com.zenika.zenpipe.decoder.CustomFieldsDecoder
 import com.zenika.zenpipe.decoder.CustomerFieldsEncoder
-import com.zenika.zenpipe.decoder.DealDecoderConfig
+import com.zenika.zenpipe.interfaceadapters.gateways.DealRepositoryImpl
 import feign.Logger
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -45,7 +44,7 @@ class TotoTest {
 
     @Test
     fun getDealAccountManagerById(){
-
+/*
         val apiClient = ApiClient()
             .feignBuilder
             .decoder(
@@ -57,8 +56,8 @@ class TotoTest {
             .logLevel(Logger.Level.FULL)
             .target(DealsApi::class.java, "https://418a8e76-2c72-4024-ac52-1a2b40c148ea.mock.pstmn.io/")
 
-            apiClient.getDeal(1)
-
+            apiClient.getDeal(1)*/
+        val dealRepository = DealRepositoryImpl()
 
 
     }
