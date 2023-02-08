@@ -1,45 +1,43 @@
 package com.zenika.zenpipe.usecase
 
+import com.zenika.zenpipe.decoder.DealDecoderConfig
 import com.zenika.zenpipe.entities.Deal
 import com.zenika.zenpipe.entities.DealId
 import com.zenika.zenpipe.entities.Deals
 import com.zenika.zenpipe.entities.Organizations
 
 
-class UpdateDealUseCase constructor(private val deals: Deals, private val organizations: Organizations) {
+class UpdateDealUseCase constructor(private val deals: Deals, private val organizations: Organizations,
+                                    private val dealConfig: DealDecoderConfig) {
 
-    fun updateDealProperties(dealId: DealId): Deal? {
+    fun updateDealProperties(dealId: DealId): Deal {
 
-        var currentDeal = deals.findById(dealId)
-        var organizationId = currentDeal.organizationId
+        val currentDeal = deals.findById(dealId)
+        val organizationId = currentDeal.organizationId
+        val customFields = mutableMapOf<String, Int?>()
+
 
         if (organizationId != null) {
-            var organization = organizations.findById(organizationId)
+            val organization = organizations.findById(organizationId)
 
-            if (currentDeal.portfolio == null) {
-                currentDeal = currentDeal.copy(portfolio = organization?.portfolio)
-            }else{
-                // TODO
+            if (currentDeal.portfolio == null || currentDeal.portfolio.id != organization.portfolio?.id) {
+                customFields[dealConfig.customFieldPortfolioKey] = organization.portfolio?.id
             }
 
             if (currentDeal.pipelineId?.value == 2) {
+                if ((currentDeal.commercialTraining == null) || (currentDeal.commercialTraining.id != organization.commercialTraining?.id)) {
 
-                if (currentDeal.commercialTraining == null) {
-                    currentDeal = currentDeal.copy(commercialTraining = organization.commercialTraining)
-                }else{
-                    // TODO
+                    customFields[dealConfig.customFieldACommercialTrainingKey] = organization.commercialTraining?.id
                 }
 
-                if (currentDeal.accountManagerTraining == null) {
-                    currentDeal = currentDeal.copy(accountManagerTraining = organization.accountManagerTraining)
-                }else{
-                    // TODO
+                if ((currentDeal.accountManagerTraining == null) || (currentDeal.accountManagerTraining.id != organization.accountManagerTraining?.id)) {
+                    customFields[dealConfig.customFieldAccountManagerKey] = organization.accountManagerTraining?.id
+
                 }
 
             }
 
         }
-
-        return currentDeal
+        return if (customFields.isEmpty())  currentDeal else deals.update(currentDeal.dealId, customFields)
     }
 }

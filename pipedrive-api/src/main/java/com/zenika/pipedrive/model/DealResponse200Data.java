@@ -13,27 +13,19 @@
 
 package com.zenika.pipedrive.model;
 
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.zenika.pipedrive.model.DealNonStrictAllOfCreatorUserId;
-import com.zenika.pipedrive.model.DealOrganizationDataWithId;
-import com.zenika.pipedrive.model.DealPersonDataWithId;
-import com.zenika.pipedrive.model.DealUserDataWithId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import org.openapitools.jackson.nullable.JsonNullable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.openapitools.jackson.nullable.JsonNullable;
-import java.util.NoSuchElementException;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
  * The deal object
@@ -103,6 +95,34 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class DealResponse200Data {
   public static final String JSON_PROPERTY_ID = "id";
   private Integer id;
+
+  private HashMap<String, String> portfolio;
+  private HashMap<String, String>  commercialTraining;
+  private HashMap<String, String>  accountManager;
+
+  public HashMap<String, String>  getPortfolio() {
+    return portfolio;
+  }
+
+  public HashMap<String, String>  getCommercialTraining() {
+    return commercialTraining;
+  }
+
+  public HashMap<String, String>  getAccountManager() {
+    return accountManager;
+  }
+
+  public void setPortfolio(HashMap<String, String>  portfolio) {
+    this.portfolio = portfolio;
+  }
+
+  public void setCommercialTraining(HashMap<String, String>  commercialTraining) {
+    this.commercialTraining = commercialTraining;
+  }
+
+  public void setAccountManager(HashMap<String, String>  accountMannager) {
+    this.accountManager = accountMannager;
+  }
 
   public static final String JSON_PROPERTY_CREATOR_USER_ID = "creator_user_id";
   private DealNonStrictAllOfCreatorUserId creatorUserId;

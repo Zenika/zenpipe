@@ -8,7 +8,7 @@ import feign.Util
 import feign.codec.EncodeException
 import java.lang.reflect.Type
 
-class CustomerFieldsEncoder constructor(private val customFields: Map<String, Any>): ZenJacksonEncoder() {
+class CustomerFieldsEncoder(private val customFields: Map<String, Int?>): ZenJacksonEncoder() {
 
     override fun encode(objectReq: Any?, bodyType: Type?, template: RequestTemplate?) {
 

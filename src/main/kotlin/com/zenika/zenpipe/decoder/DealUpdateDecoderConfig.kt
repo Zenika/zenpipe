@@ -1,16 +1,16 @@
 package com.zenika.zenpipe.decoder
 
-import com.zenika.pipedrive.model.GetDealResponse200
+import com.zenika.pipedrive.model.DealResponse200
 
-class DealDecoderConfig(val customFieldAccountManagerKey: String,
-                         val customFieldACommercialTrainingKey: String,
-                         val customFieldPortfolioKey: String
+class DealUpdateDecoderConfig(private val customFieldAccountManagerKey: String,
+                              private val customFieldACommercialTrainingKey: String,
+                              private val customFieldPortfolioKey: String
 ): DecoderConfig {
 
     override fun createConfig(): Map<String, SetCustomFields> {
 
         val setAccountManager: SetCustomFields = { key, objectResponse, jsonNode, getCustomFields ->
-            if (objectResponse is GetDealResponse200) {
+            if (objectResponse is DealResponse200) {
                 objectResponse.data?.accountManager = getCustomFields(jsonNode, key)
             }
             objectResponse
@@ -18,7 +18,7 @@ class DealDecoderConfig(val customFieldAccountManagerKey: String,
 
         val setCommercialTraining: SetCustomFields =
                 { key, objectResponse, jsonNode, getCustomFields ->
-                    if (objectResponse is GetDealResponse200) {
+                    if (objectResponse is DealResponse200) {
                         objectResponse.data?.commercialTraining = getCustomFields(jsonNode, key)
                     }
                     objectResponse
@@ -26,7 +26,7 @@ class DealDecoderConfig(val customFieldAccountManagerKey: String,
 
         val setPortfolio: SetCustomFields =
                 { key, objectResponse, jsonNode, getCustomFields ->
-            if (objectResponse is GetDealResponse200) {
+            if (objectResponse is DealResponse200) {
                 objectResponse.data?.portfolio = getCustomFields(jsonNode, key)
             }
             objectResponse
