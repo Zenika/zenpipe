@@ -1,8 +1,11 @@
 
 plugins {
     kotlin("jvm") version "1.8.0" // Kotlin version to use
+    id("org.springframework.boot") version "3.0.2"
     application // Application plugin. Also see 1️⃣ below the code
 }
+
+apply(plugin = "io.spring.dependency-management")
 
 group = "org.example" // A company name, for example, `org.jetbrains`
 version = "1.0-SNAPSHOT" // Version to assign to the built artifact
@@ -14,9 +17,10 @@ repositories { // Sources of dependencies. See 2️⃣
 dependencies { // All the libraries you want to use. See 4️⃣
     // Copy dependencies' names after you find them in a repository
     implementation(project("pipedrive-api"))
+
+    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation(platform("io.github.openfeign:feign-bom:12.1"))
     implementation("io.github.openfeign:feign-core")
-    // https://mvnrepository.com/artifact/io.github.openfeign/feign-gson
 
     implementation("io.github.openfeign:feign-jackson:9.3.1")
     implementation("org.openapitools:jackson-databind-nullable:0.2.4")

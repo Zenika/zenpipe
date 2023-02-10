@@ -6,9 +6,9 @@ import com.zenika.pipedrive.model.GetOrganizationResponse200
 typealias SetCustomFields = (String, Any, JsonNode, (JsonNode, String) -> HashMap<String, String>?) -> Any
 
 class OrganizationDecoderConfig (
-        private val customFieldAccountManagerKey: String,
-        private val customFieldACommercialTrainingKey: String,
-        private val customFieldPortfolioKey: String
+         val customFieldAccountManagerKey: String,
+         val customFieldACommercialTrainingKey: String,
+         val customFieldPortfolioKey: String
 ) : DecoderConfig {
 
     override fun createConfig(): Map<String, SetCustomFields> {
