@@ -11,12 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class WebhookController (@Autowired val useCase: UpdateDealUseCase) {
-
+class WebhookController(@Autowired val useCase: UpdateDealUseCase) {
 
     @PostMapping("/webhook")
-    fun index(@RequestBody webhookRequest: WebhookRequest): ResponseEntity<Deal>{
-        val deal =useCase.updateDealProperties(DealId(webhookRequest.meta.id))
+    fun index(@RequestBody webhookRequest: WebhookRequest): ResponseEntity<Deal> {
+        val deal = useCase.updateDealProperties(DealId(webhookRequest.meta.id))
         return ResponseEntity(deal, HttpStatus.OK)
     }
 }

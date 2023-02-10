@@ -35,11 +35,7 @@ class DealDecoderConfig(val customFieldAccountManagerKey: String,
         return mapOf(
                 customFieldAccountManagerKey to setAccountManager,
                 customFieldACommercialTrainingKey to setCommercialTraining,
-                customFieldPortfolioKey to setPortfolio,
-
-//                "27bcf77de242b798829f7b3321072bc3336bfa01" to setAccountManager,
-//                "2a888345f9f0fc53d3dab9cc4c6ad85850091259" to setCommercialTraining,
-//                "e28b36cf2a9468b4ba7798257a3c1c236adf88bd" to setPortfolio
+                customFieldPortfolioKey to setPortfolio
         )
 
     }

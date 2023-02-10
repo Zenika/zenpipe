@@ -7,8 +7,10 @@ import com.zenika.zenpipe.entities.Deals
 import com.zenika.zenpipe.entities.Organizations
 
 
-class UpdateDealUseCase constructor(private val deals: Deals, private val organizations: Organizations,
-                                    private val dealConfig: DealDecoderConfig) {
+class UpdateDealUseCase constructor(
+    private val deals: Deals, private val organizations: Organizations,
+    private val dealConfig: DealDecoderConfig
+) {
 
     fun updateDealProperties(dealId: DealId): Deal {
 
@@ -20,17 +22,17 @@ class UpdateDealUseCase constructor(private val deals: Deals, private val organi
         if (organizationId != null) {
             val organization = organizations.findById(organizationId)
 
-            if (currentDeal.portfolio == null || currentDeal.portfolio.id != organization.portfolio?.id) {
+            if (currentDeal.portfolio == null) {
                 customFields[dealConfig.customFieldPortfolioKey] = organization.portfolio?.id
             }
 
             if (currentDeal.pipelineId?.value == 2) {
-                if ((currentDeal.commercialTraining == null) || (currentDeal.commercialTraining.id != organization.commercialTraining?.id)) {
+                if ((currentDeal.commercialTraining == null)) {
 
                     customFields[dealConfig.customFieldACommercialTrainingKey] = organization.commercialTraining?.id
                 }
 
-                if ((currentDeal.accountManagerTraining == null) || (currentDeal.accountManagerTraining.id != organization.accountManagerTraining?.id)) {
+                if ((currentDeal.accountManagerTraining == null)) {
                     customFields[dealConfig.customFieldAccountManagerKey] = organization.accountManagerTraining?.id
 
                 }
@@ -38,6 +40,6 @@ class UpdateDealUseCase constructor(private val deals: Deals, private val organi
             }
 
         }
-        return if (customFields.isEmpty())  currentDeal else deals.update(currentDeal.dealId, customFields)
+        return if (customFields.isEmpty()) currentDeal else deals.update(currentDeal.dealId, customFields)
     }
 }

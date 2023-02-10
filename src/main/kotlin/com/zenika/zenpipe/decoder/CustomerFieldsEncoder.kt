@@ -8,22 +8,20 @@ import feign.Util
 import feign.codec.EncodeException
 import java.lang.reflect.Type
 
-class CustomerFieldsEncoder(private val customFields: Map<String, Int?>): ZenJacksonEncoder() {
+class CustomerFieldsEncoder(private val customFields: Map<String, Int?>) : ZenJacksonEncoder() {
 
     override fun encode(objectReq: Any?, bodyType: Type?, template: RequestTemplate?) {
 
-
         try {
-            var node : ObjectNode = mapper.valueToTree(objectReq)
+            var node: ObjectNode = mapper.valueToTree(objectReq)
 
-            customFields.forEach{ item ->
+            customFields.forEach { item ->
                 node = node.set(item.key, mapper.valueToTree(item.value))
             }
 
-
             template?.body(mapper.writeValueAsBytes(node), Util.UTF_8)
 
-        } catch (e : JsonProcessingException ) {
+        } catch (e: JsonProcessingException) {
             throw EncodeException(e.message, e)
         }
     }

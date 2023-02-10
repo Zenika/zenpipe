@@ -18,13 +18,13 @@ class CustomFieldsDecoder constructor(private val decoderConfig: DecoderConfig):
         if (response?.body() == null)
             return null
 
-        var reader = response?.body()?.asReader(response.charset())
+        var reader = response.body()?.asReader(response.charset())
 
         if (!reader?.markSupported()!!) {
             reader = BufferedReader(reader, 1)
         }
 
-        reader.mark(1);
+        reader.mark(1)
         if (reader.read() == -1) {
             return null
         }

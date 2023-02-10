@@ -2,57 +2,35 @@ package com.zenika.zenpipe.interfaceadapters.gateways
 
 import com.zenika.pipedrive.api.DealsApi
 import com.zenika.pipedrive.invoker.ApiClient
+import com.zenika.pipedrive.model.DealNonStrictWithDetails
+import com.zenika.pipedrive.model.DealResponse200Data
 import com.zenika.pipedrive.model.UpdateDealRequest
 import com.zenika.zenpipe.decoder.*
 import com.zenika.zenpipe.entities.*
 import com.zenika.zenpipe.entities.Deals
 import feign.Logger
+import java.lang.RuntimeException
 
-class DealRepositoryImpl constructor(dealCustomFields: DealDecoderConfig) : Deals {
+class DealRepositoryImpl (dealCustomFields: DealDecoderConfig, override val dealsApi: DealsApi) : Deals {
 
-    private val dealCustomFieldAccountManagerKey: String = dealCustomFields.customFieldAccountManagerKey//"e3605a045b0a8f245ba8f39aa040984fa136a6fb"
-    private val dealCustomFieldACommercialTrainingKey: String = dealCustomFields.customFieldACommercialTrainingKey //"65ce8ba3355440b46602fd510c9d0eaedd441be7"
-    private val dealCustomFieldPortfolioKey: String = dealCustomFields.customFieldPortfolioKey ///"39fa372d6bd7a72582610dc42f63ece2a5386522"
+    private val dealCustomFieldAccountManagerKey: String =
+        dealCustomFields.customFieldAccountManagerKey
+    private val dealCustomFieldACommercialTrainingKey: String =
+        dealCustomFields.customFieldACommercialTrainingKey
+    private val dealCustomFieldPortfolioKey: String =
+        dealCustomFields.customFieldPortfolioKey
+
 
     override fun findById(dealId: DealId): Deal {
 
-        val dealsApi = ApiClient("api_key", "0c954df5e04eb173e3f1dad6b5dbbf61e4a0d03b")
-            .feignBuilder
-            .decoder(
-                CustomFieldsDecoder(
-                    DealDecoderConfig(
-                        dealCustomFieldAccountManagerKey,
-                        dealCustomFieldACommercialTrainingKey,
-                        dealCustomFieldPortfolioKey
-                    )
-                )
-            )
-            .logger(Logger.ErrorLogger())
-            .logLevel(Logger.Level.FULL)
-            .target(DealsApi::class.java, "https://zenika-sandbox.pipedrive.com/v1/")
         val dealRes = dealsApi.getDeal(dealId.value).data
 
-        val organizationId = OrganizationId(dealRes?.orgId?.value!!)
-
-        val portfolio = dealRes.portfolio?.let { Portfolio(dealCustomFieldPortfolioKey, it["value"]!!.toInt(), it) }
-
-        val accountManager = dealRes.accountManager?.let {
-            AccountManagerTraining(
-                dealCustomFieldAccountManagerKey,
-                it["value"]!!.toInt(), it
-            )
-        }
-
-        val commercialTraining = dealRes.commercialTraining?.let {
-            CommercialTraining(
-                dealCustomFieldACommercialTrainingKey,
-                it["value"]!!.toInt(), it
-            )
-        }
-
-        val pipelineId = PipelineId(dealRes.pipelineId)
-
-        return Deal(dealId, organizationId, portfolio, pipelineId, commercialTraining, accountManager)
+        return dealRes!!.toDeal(
+            dealId,
+            dealCustomFieldPortfolioKey,
+            dealCustomFieldACommercialTrainingKey,
+            dealCustomFieldAccountManagerKey
+        )
     }
 
     override fun update(dealId: DealId, customFields: Map<String, Int?>): Deal {
@@ -74,27 +52,114 @@ class DealRepositoryImpl constructor(dealCustomFields: DealDecoderConfig) : Deal
         val dealResponse = dealsApi.updateDeal(dealId.value, UpdateDealRequest()).data
 
 
-        val organizationId = OrganizationId(dealResponse?.orgId?.value!!)
+        return dealResponse!!.toDeal(
+            dealId,
+            dealCustomFieldPortfolioKey,
+            dealCustomFieldACommercialTrainingKey,
+            dealCustomFieldAccountManagerKey
+        )
 
-        val portfolio =
-            dealResponse.portfolio?.let { Portfolio(dealCustomFieldPortfolioKey, it["value"]!!.toInt(), it) }
+    }
 
-        val accountManager = dealResponse.accountManager?.let {
+
+}
+
+fun DealResponse200Data.toDeal(
+    dealId: DealId, dealCustomFieldPortfolioKey: String,
+    dealCustomFieldAccountManagerKey: String,
+    dealCustomFieldACommercialTrainingKey: String
+): Deal {
+
+    return Deal(
+        dealId,
+        extractOrganizationId(this),
+        extractPortfolio(this, dealCustomFieldPortfolioKey),
+        extractPipelineId(this),
+        extractCommercialTraining(this, dealCustomFieldACommercialTrainingKey),
+        extractAccountManger(this, dealCustomFieldAccountManagerKey)
+    )
+
+}
+
+fun DealNonStrictWithDetails.toDeal(
+    dealId: DealId, dealCustomFieldPortfolioKey: String,
+    dealCustomFieldAccountManagerKey: String,
+    dealCustomFieldACommercialTrainingKey: String
+): Deal {
+
+    return Deal(
+        dealId,
+        extractOrganizationId(this),
+        extractPortfolio(this, dealCustomFieldPortfolioKey),
+        extractPipelineId(this),
+        extractCommercialTraining(this, dealCustomFieldACommercialTrainingKey),
+        extractAccountManger(this, dealCustomFieldAccountManagerKey)
+    )
+
+}
+
+fun <T> extractOrganizationId(t: T): OrganizationId {
+    return when (t) {
+        is DealNonStrictWithDetails -> OrganizationId(t.orgId?.value!!)
+        is DealResponse200Data -> OrganizationId(t.orgId?.value!!)
+        else -> throw RuntimeException("Type not managed !")
+    }
+}
+
+fun <T> extractPortfolio(t: T, dealCustomFieldPortfolioKey: String): Portfolio? {
+    return when (t) {
+        is DealNonStrictWithDetails -> t.portfolio?.let {
+            Portfolio(
+                dealCustomFieldPortfolioKey,
+                it["value"]!!.toInt(),
+                it
+            )
+        }
+
+        is DealResponse200Data -> t.portfolio?.let { Portfolio(dealCustomFieldPortfolioKey, it["value"]!!.toInt(), it) }
+        else -> throw RuntimeException("Type not managed !")
+    }
+}
+
+fun <T> extractAccountManger(t: T, dealCustomFieldAccountManagerKey: String): AccountManagerTraining? {
+    return when (t) {
+        is DealNonStrictWithDetails -> t.accountManager?.let {
             AccountManagerTraining(
                 dealCustomFieldAccountManagerKey,
                 it["value"]!!.toInt(), it
             )
         }
 
-        val commercialTraining = dealResponse.commercialTraining?.let {
+        is DealResponse200Data -> t.accountManager?.let {
+            AccountManagerTraining(
+                dealCustomFieldAccountManagerKey,
+                it["value"]!!.toInt(), it
+            )
+        }
+
+        else -> throw RuntimeException("Type not managed !")
+    }
+}
+
+
+fun <T> extractCommercialTraining(t: T, dealCustomFieldACommercialTrainingKey: String): CommercialTraining? {
+    return when (t) {
+        is DealNonStrictWithDetails -> t.commercialTraining?.let {
             CommercialTraining(dealCustomFieldACommercialTrainingKey, it["value"]!!.toInt(), it)
         }
 
-        val pipelineId = PipelineId(dealResponse.pipelineId)
+        is DealResponse200Data -> t.commercialTraining?.let {
+            CommercialTraining(dealCustomFieldACommercialTrainingKey, it["value"]!!.toInt(), it)
+        }
 
-        return Deal(dealId, organizationId, portfolio, pipelineId, commercialTraining, accountManager)
-
+        else -> throw RuntimeException("Type not managed !")
     }
+}
 
-
+fun <T> extractPipelineId(t: T): PipelineId {
+    return when (t) {
+        is DealNonStrictWithDetails -> PipelineId(t.pipelineId)
+        is DealResponse200Data -> PipelineId(t.pipelineId)
+        else -> throw RuntimeException("Type not managed !")
+    }
 }
