@@ -1,0 +1,11 @@
+key:
+  deal:
+    commercial-training:
+    account-manager:
+    portfolio:
+  org:
+    commercial-training:
+    account-manager:
+    portfolio:
+api-client: ${API_KEY}
+uri-pipedrive:

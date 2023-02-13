@@ -20,9 +20,9 @@ open class AppConfig {
 
     @Bean
     open fun dealDecoderConfig(
-        @Value("\${accountmanager.deal.key}") customFieldAccountManagerKey: String,
-        @Value("\${commercialtrainig.deal.key}") customFieldACommercialTrainingKey: String,
-        @Value("\${portfolio.deal.key}") customFieldPortfolioKey: String
+        @Value("\${key.deal.account-manager}") customFieldAccountManagerKey: String,
+        @Value("\${key.deal.commercial-training}") customFieldACommercialTrainingKey: String,
+        @Value("\${key.deal.portfolio}") customFieldPortfolioKey: String
     ): DealDecoderConfig {
         return DealDecoderConfig(
             customFieldAccountManagerKey,
@@ -33,9 +33,9 @@ open class AppConfig {
 
     @Bean
     open fun orgDecoderConfig(
-        @Value("\${accountmanager.org.key}") customFieldAccountManagerKey: String,
-        @Value("\${commercialtrainig.org.key}") customFieldACommercialTrainingKey: String,
-        @Value("\${portfolio.org.key}") customFieldPortfolioKey: String
+        @Value("\${key.org.account-manager}") customFieldAccountManagerKey: String,
+        @Value("\${key.org.commercial-training}") customFieldACommercialTrainingKey: String,
+        @Value("\${key.org.portfolio}") customFieldPortfolioKey: String
     ): OrganizationDecoderConfig {
         return OrganizationDecoderConfig(
             customFieldAccountManagerKey,
@@ -65,7 +65,7 @@ open class AppConfig {
     @Bean
     open fun dealsApi(
         @Value("\${api-client}") apiKey: String,
-        @Value("\${url-pipedrive}") urlPipedrive: String,
+        @Value("\${uri-pipedrive}") urlPipedrive: String,
         dealDecoderConfig: DealDecoderConfig
     ): DealsApi {
         return ApiClient("api_key", apiKey)
@@ -83,7 +83,7 @@ open class AppConfig {
     @Bean
     open fun organizationsApi(
         @Value("\${api-client}") apiKey: String,
-        @Value("\${url-pipedrive}") urlPipedrive: String,
+        @Value("\${uri-pipedrive}") urlPipedrive: String,
         orgDecoderConfig: OrganizationDecoderConfig,
 
         ): OrganizationsApi {

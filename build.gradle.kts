@@ -18,12 +18,18 @@ dependencies { // All the libraries you want to use. See 4️⃣
     // Copy dependencies' names after you find them in a repository
     implementation(project("pipedrive-api"))
 
-    implementation("org.springframework.boot:spring-boot-starter-web")
+
     implementation(platform("io.github.openfeign:feign-bom:12.1"))
     implementation("io.github.openfeign:feign-core")
 
     implementation("io.github.openfeign:feign-jackson:9.3.1")
     implementation("org.openapitools:jackson-databind-nullable:0.2.4")
+
+
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.cloud:spring-cloud-config-server:4.0.1")
+    implementation("org.springframework.cloud:spring-cloud-starter-config:4.0.1")
+    implementation("org.springframework.cloud:spring-cloud-starter-bootstrap:4.0.1")
 
     testImplementation(kotlin("test")) // The Kotlin test library
 }
