@@ -1,11 +1,22 @@
-key:
-  deal:
-    commercial-training: e3605a045b0a8f245ba8f39aa040984fa136a6fb+
-    account-manager: 65ce8ba3355440b46602fd510c9d0eaedd441be7+
-    portfolio: 39fa372d6bd7a72582610dc42f63ece2a5386522+
-  org:
-    commercial-training: 27bcf77de242b798829f7b3321072bc3336bfa01
-    account-manager: 2a888345f9f0fc53d3dab9cc4c6ad85850091259
-    portfolio: e28b36cf2a9468b4ba7798257a3c1c236adf88bd
+deal:
+  commercial-training:
+    name: Commercial Training [Datalink]
+    id : 12512
+  account-manager:
+    name: Account Manager Training [Datalink]
+    id: 12510
+  portfolio:
+    name: Portfolio [Datalink]
+    id: 12513
+org:
+  commercial-training:
+    name: Commercial Training
+    id: 4023
+  account-manager:
+    name: Account Manager Training
+    id: 4022
+  portfolio:
+    name: Customer Portfolio
+    id: 4025
 api-client: ${API_KEY}
 uri-pipedrive: https://zenika-sandbox.pipedrive.com/v1/

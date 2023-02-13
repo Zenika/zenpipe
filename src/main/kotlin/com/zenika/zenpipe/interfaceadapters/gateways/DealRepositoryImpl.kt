@@ -1,23 +1,33 @@
 package com.zenika.zenpipe.interfaceadapters.gateways
 
 import com.zenika.pipedrive.api.DealsApi
+import com.zenika.pipedrive.invoker.ApiClient
 import com.zenika.pipedrive.model.DealNonStrictWithDetails
 import com.zenika.pipedrive.model.DealResponse200Data
 import com.zenika.pipedrive.model.UpdateDealRequest
 import com.zenika.zenpipe.decoder.*
 import com.zenika.zenpipe.entities.*
 import com.zenika.zenpipe.entities.Deals
+import feign.Logger
 import java.lang.RuntimeException
 
-class DealRepositoryImpl (dealCustomFields: DealDecoderConfig, override val dealsApi: DealsApi) : Deals {
+class DealRepositoryImpl(
+    dealCustomFields: DealDecoderConfig,
+    dealUpdateDecoderConfig: DealUpdateDecoderConfig,
+    apiKey: String, uriPipedrive: String,
+    override val dealsApi: DealsApi
+) : Deals {
 
     private val dealCustomFieldAccountManagerKey: String =
-        dealCustomFields.customFieldAccountManagerKey
+        dealCustomFields.customFieldAccountManger.key
     private val dealCustomFieldACommercialTrainingKey: String =
-        dealCustomFields.customFieldACommercialTrainingKey
+        dealCustomFields.customFieldCommercialTraining.key
     private val dealCustomFieldPortfolioKey: String =
-        dealCustomFields.customFieldPortfolioKey
+        dealCustomFields.customFieldPortfolio.key
 
+    private val localApiKey = apiKey
+    private val localUriPipedrive = uriPipedrive
+    private val localDealUpdateDecoderConfig = dealUpdateDecoderConfig
 
     override fun findById(dealId: DealId): Deal {
 
@@ -32,7 +42,18 @@ class DealRepositoryImpl (dealCustomFields: DealDecoderConfig, override val deal
     }
 
     override fun update(dealId: DealId, customFields: Map<String, Int?>): Deal {
-        val dealResponse = dealsApi.updateDeal(dealId.value, UpdateDealRequest()).data
+        val apiClient = ApiClient("api_key", localApiKey)
+            .feignBuilder
+            .encoder(CustomerFieldsEncoder(customFields))
+            .decoder(
+                CustomFieldsDecoder(
+                    localDealUpdateDecoderConfig
+                )
+            )
+            .logger(Logger.ErrorLogger())
+            .logLevel(Logger.Level.FULL)
+            .target(DealsApi::class.java, localUriPipedrive)
+        val dealResponse = apiClient.updateDeal(dealId.value, UpdateDealRequest()).data
 
         return dealResponse!!.toDeal(
             dealId,

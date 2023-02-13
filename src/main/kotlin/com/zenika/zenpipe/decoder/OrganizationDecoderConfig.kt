@@ -2,13 +2,14 @@ package com.zenika.zenpipe.decoder
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.zenika.pipedrive.model.GetOrganizationResponse200
+import com.zenika.zenpipe.entities.CustomField
 
 typealias SetCustomFields = (String, Any, JsonNode, (JsonNode, String) -> HashMap<String, String>?) -> Any
 
-class OrganizationDecoderConfig (
-         val customFieldAccountManagerKey: String,
-         val customFieldACommercialTrainingKey: String,
-         val customFieldPortfolioKey: String
+class OrganizationDecoderConfig(
+    val orgCustomFieldAccountManger: CustomField,
+    val orgCustomFieldCommercialTraining: CustomField,
+    val orgCustomFieldPortfolio: CustomField
 ) : DecoderConfig {
 
     override fun createConfig(): Map<String, SetCustomFields> {
@@ -35,14 +36,11 @@ class OrganizationDecoderConfig (
         }
 
         return mapOf(
-                customFieldAccountManagerKey to setAccountManager,
-                customFieldACommercialTrainingKey to setCommercialTraining,
-                customFieldPortfolioKey to setPortfolio,
+            orgCustomFieldAccountManger.key to setAccountManager,
+            orgCustomFieldCommercialTraining.key to setCommercialTraining,
+            orgCustomFieldPortfolio.key to setPortfolio,
 
-//                "27bcf77de242b798829f7b3321072bc3336bfa01" to setAccountManager,
-//                "2a888345f9f0fc53d3dab9cc4c6ad85850091259" to setCommercialTraining,
-//                "e28b36cf2a9468b4ba7798257a3c1c236adf88bd" to setPortfolio
-        )
+            )
 
     }
 }

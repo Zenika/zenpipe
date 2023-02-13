@@ -1,11 +1,22 @@
-key:
-  deal:
-    commercial-training:
-    account-manager:
-    portfolio:
-  org:
-    commercial-training:
-    account-manager:
-    portfolio:
-api-client: ${API_KEY}
-uri-pipedrive:
+deal:
+  commercial-training:
+    name:
+    id :
+  account-manager:
+    name:
+    id:
+  portfolio:
+    name:
+    id:
+org:
+  commercial-training:
+    name:
+    id:
+  account-manager:
+    name:
+    id:
+  portfolio:
+    name:
+    id:
+api-client: ${API_name}
+uri-pipedrive: https://zenika-sandbox.pipedrive.com/v1/

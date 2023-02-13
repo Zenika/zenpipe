@@ -9,9 +9,9 @@ class OrganizationRepositoryImpl constructor(
     override val organizationsApi: OrganizationsApi
 ) : Organizations {
 
-    private val orgCustomFieldAccountManagerKey = orgCustomFields.customFieldAccountManagerKey
-    private val orgCustomFieldACommercialTrainingKey = orgCustomFields.customFieldACommercialTrainingKey
-    private val orgCustomFieldPortfolioKey = orgCustomFields.customFieldPortfolioKey
+    private val orgCustomFieldAccountManagerKey = orgCustomFields.orgCustomFieldAccountManger.key
+    private val orgCustomFieldACommercialTrainingKey = orgCustomFields.orgCustomFieldCommercialTraining.key
+    private val orgCustomFieldPortfolioKey = orgCustomFields.orgCustomFieldPortfolio.key
 
     override fun findById(orgId: OrganizationId): Organization {
 

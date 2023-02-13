@@ -23,17 +23,17 @@ class UpdateDealUseCase constructor(
             val organization = organizations.findById(organizationId)
 
             if (currentDeal.portfolio == null) {
-                customFields[dealConfig.customFieldPortfolioKey] = organization.portfolio?.id
+                customFields[dealConfig.customFieldPortfolio.key] = organization.portfolio?.id
             }
 
             if (currentDeal.pipelineId?.value == 2) {
                 if ((currentDeal.commercialTraining == null)) {
 
-                    customFields[dealConfig.customFieldACommercialTrainingKey] = organization.commercialTraining?.id
+                    customFields[dealConfig.customFieldCommercialTraining.key] = organization.commercialTraining?.id
                 }
 
                 if ((currentDeal.accountManagerTraining == null)) {
-                    customFields[dealConfig.customFieldAccountManagerKey] = organization.accountManagerTraining?.id
+                    customFields[dealConfig.customFieldAccountManger.key] = organization.accountManagerTraining?.id
 
                 }
 
