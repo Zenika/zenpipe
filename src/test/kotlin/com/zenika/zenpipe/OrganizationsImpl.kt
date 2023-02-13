@@ -1,9 +1,10 @@
 package com.zenika.zenpipe
 
+import com.zenika.pipedrive.api.OrganizationsApi
 import com.zenika.zenpipe.entities.*
 
 
-class OrganizationsImpl: Organizations {
+class OrganizationsImpl(override val organizationsApi: OrganizationsApi? = null) : Organizations {
 
     private val portfolio = Portfolio("portFolio2", 11, mapOf())
     private val commercialTraining = CommercialTraining("CT2", 22, mapOf())

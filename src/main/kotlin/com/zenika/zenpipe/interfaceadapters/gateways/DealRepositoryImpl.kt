@@ -1,14 +1,12 @@
 package com.zenika.zenpipe.interfaceadapters.gateways
 
 import com.zenika.pipedrive.api.DealsApi
-import com.zenika.pipedrive.invoker.ApiClient
 import com.zenika.pipedrive.model.DealNonStrictWithDetails
 import com.zenika.pipedrive.model.DealResponse200Data
 import com.zenika.pipedrive.model.UpdateDealRequest
 import com.zenika.zenpipe.decoder.*
 import com.zenika.zenpipe.entities.*
 import com.zenika.zenpipe.entities.Deals
-import feign.Logger
 import java.lang.RuntimeException
 
 class DealRepositoryImpl (dealCustomFields: DealDecoderConfig, override val dealsApi: DealsApi) : Deals {
@@ -34,23 +32,7 @@ class DealRepositoryImpl (dealCustomFields: DealDecoderConfig, override val deal
     }
 
     override fun update(dealId: DealId, customFields: Map<String, Int?>): Deal {
-        val dealsApi = ApiClient("api_key", "0c954df5e04eb173e3f1dad6b5dbbf61e4a0d03b")
-            .feignBuilder
-            .encoder(CustomerFieldsEncoder(customFields))
-            .decoder(
-                CustomFieldsDecoder(
-                    DealUpdateDecoderConfig(
-                        dealCustomFieldAccountManagerKey,
-                        dealCustomFieldACommercialTrainingKey,
-                        dealCustomFieldPortfolioKey
-                    )
-                )
-            )
-            .logger(Logger.ErrorLogger())
-            .logLevel(Logger.Level.FULL)
-            .target(DealsApi::class.java, "https://zenika-sandbox.pipedrive.com/v1/")
         val dealResponse = dealsApi.updateDeal(dealId.value, UpdateDealRequest()).data
-
 
         return dealResponse!!.toDeal(
             dealId,
