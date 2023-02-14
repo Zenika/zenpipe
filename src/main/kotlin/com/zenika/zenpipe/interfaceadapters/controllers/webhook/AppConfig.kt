@@ -18,6 +18,64 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 open class AppConfig {
+
+    @Bean
+    open fun dealDecoderConfig(
+        dealCustomFieldAccountManger: CustomField,
+        dealCustomFieldCommercialTraining: CustomField,
+        dealCustomFieldPortfolio: CustomField
+    ): DealDecoderConfig {
+        return DealDecoderConfig(
+            dealCustomFieldAccountManger,
+            dealCustomFieldCommercialTraining,
+            dealCustomFieldPortfolio
+        )
+    }
+
+    @Bean
+    open fun orgDecoderConfig(
+        orgCustomFieldAccountManger: CustomField,
+        orgCustomFieldCommercialTraining: CustomField,
+        orgCustomFieldPortfolio: CustomField
+    ): OrganizationDecoderConfig {
+        return OrganizationDecoderConfig(
+            orgCustomFieldAccountManger,
+            orgCustomFieldCommercialTraining,
+            orgCustomFieldPortfolio
+        )
+    }
+
+    @Bean
+    open fun dealUpdateDecoderConfig(
+        dealCustomFieldAccountManger: CustomField,
+        dealCustomFieldCommercialTraining: CustomField,
+        dealCustomFieldPortfolio: CustomField
+    ): DealUpdateDecoderConfig {
+        return DealUpdateDecoderConfig(
+            dealCustomFieldAccountManger,
+            dealCustomFieldCommercialTraining,
+            dealCustomFieldPortfolio
+        )
+    }
+
+    @Bean
+    open fun dealsApi(
+        @Value("\${api-client}") apiKey: String,
+        @Value("\${uri-pipedrive}") urlPipedrive: String,
+        dealDecoderConfig: DealDecoderConfig
+    ): DealsApi {
+        return ApiClient("api_key", apiKey)
+            .feignBuilder
+            .decoder(
+                CustomFieldsDecoder(
+                    dealDecoderConfig
+                )
+            )
+            .logger(Logger.ErrorLogger())
+            .logLevel(Logger.Level.FULL)
+            .target(DealsApi::class.java, urlPipedrive)
+    }
+
     @Bean
     open fun organizationsApi(
         @Value("\${api-client}") apiKey: String,
@@ -48,43 +106,6 @@ open class AppConfig {
     }
 
     @Bean
-    open fun dealCustomFieldAccountManger(
-        @Value("\${deal.account-manager.id}") accountManagerId: Int,
-        @Value("\${deal.commercial-training.id}") commercialTrainingId: Int,
-        @Value("\${deal.portfolio.id}") portfolioId: Int,
-        dealsFieldsApi: DealFieldsApi
-    ): CustomField {
-        val customFieldAccountManger =
-            dealsFieldsApi.getDealField(accountManagerId).data?.let { CustomField(it.id!!, it.name!!, it.key!!) }
-        return customFieldAccountManger!!
-    }
-
-    @Bean
-    open fun dealCustomFieldCommercialTraining(
-        @Value("\${deal.account-manager.id}") accountManagerId: Int,
-        @Value("\${deal.commercial-training.id}") commercialTrainingId: Int,
-        @Value("\${deal.portfolio.id}") portfolioId: Int,
-        dealsFieldsApi: DealFieldsApi
-    ): CustomField {
-        val customFieldCommercialTraining =
-            dealsFieldsApi.getDealField(commercialTrainingId).data?.let { CustomField(it.id!!, it.name!!, it.key!!) }
-        return customFieldCommercialTraining!!
-    }
-
-    @Bean
-    open fun dealCustomFieldPortfolio(
-        @Value("\${deal.account-manager.id}") accountManagerId: Int,
-        @Value("\${deal.commercial-training.id}") commercialTrainingId: Int,
-        @Value("\${deal.portfolio.id}") portfolioId: Int,
-        dealsFieldsApi: DealFieldsApi
-    ): CustomField {
-        val customFieldPortfolio =
-            dealsFieldsApi.getDealField(portfolioId).data?.let { CustomField(it.id!!, it.name!!, it.key!!) }
-
-        return customFieldPortfolio!!
-    }
-
-    @Bean
     open fun organizationsFieldsApi(
         @Value("\${api-client}") apiKey: String,
         @Value("\${uri-pipedrive}") urlPipedrive: String
@@ -95,12 +116,40 @@ open class AppConfig {
             .logLevel(Logger.Level.FULL)
             .target(OrganizationFieldsApi::class.java, urlPipedrive)
     }
+    @Bean
+    open fun dealCustomFieldAccountManger(
+        @Value("\${deal.account-manager.id}") accountManagerId: Int,
+        dealsFieldsApi: DealFieldsApi
+    ): CustomField {
+        val customFieldAccountManger =
+            dealsFieldsApi.getDealField(accountManagerId).data?.let { CustomField(it.id!!, it.name!!, it.key!!) }
+        return customFieldAccountManger!!
+    }
+
+    @Bean
+    open fun dealCustomFieldCommercialTraining(
+        @Value("\${deal.commercial-training.id}") commercialTrainingId: Int,
+        dealsFieldsApi: DealFieldsApi
+    ): CustomField {
+        val customFieldCommercialTraining =
+            dealsFieldsApi.getDealField(commercialTrainingId).data?.let { CustomField(it.id!!, it.name!!, it.key!!) }
+        return customFieldCommercialTraining!!
+    }
+
+    @Bean
+    open fun dealCustomFieldPortfolio(
+        @Value("\${deal.portfolio.id}") portfolioId: Int,
+        dealsFieldsApi: DealFieldsApi
+    ): CustomField {
+        val customFieldPortfolio =
+            dealsFieldsApi.getDealField(portfolioId).data?.let { CustomField(it.id!!, it.name!!, it.key!!) }
+
+        return customFieldPortfolio!!
+    }
 
     @Bean
     open fun orgCustomFieldAccountManger(
         @Value("\${org.account-manager.id}") accountManagerId: Int,
-        @Value("\${org.commercial-training.id}") commercialTrainingId: Int,
-        @Value("\${org.portfolio.id}") portfolioId: Int,
         organizationsFieldsApi: OrganizationFieldsApi
     ): CustomField {
         val customFieldAccountManger =
@@ -116,9 +165,7 @@ open class AppConfig {
 
     @Bean
     open fun orgCustomFieldCommercialTraining(
-        @Value("\${org.account-manager.id}") accountManagerId: Int,
         @Value("\${org.commercial-training.id}") commercialTrainingId: Int,
-        @Value("\${org.portfolio.id}") portfolioId: Int,
         organizationsFieldsApi: OrganizationFieldsApi
     ): CustomField {
         val customFieldCommercialTraining =
@@ -134,8 +181,6 @@ open class AppConfig {
 
     @Bean
     open fun orgCustomFieldPortfolio(
-        @Value("\${org.account-manager.id}") accountManagerId: Int,
-        @Value("\${org.commercial-training.id}") commercialTrainingId: Int,
         @Value("\${org.portfolio.id}") portfolioId: Int,
         organizationsFieldsApi: OrganizationFieldsApi
     ): CustomField {
@@ -152,43 +197,6 @@ open class AppConfig {
     }
 
 
-    @Bean
-    open fun dealDecoderConfig(
-        dealCustomFieldAccountManger: CustomField,
-        dealCustomFieldCommercialTraining: CustomField,
-        dealCustomFieldPortfolio: CustomField
-    ): DealDecoderConfig {
-        return DealDecoderConfig(
-            dealCustomFieldAccountManger,
-            dealCustomFieldCommercialTraining,
-            dealCustomFieldPortfolio
-        )
-    }
-
-    @Bean
-    open fun dealUpdateDecoderConfig(
-        dealCustomFieldAccountManger: CustomField,
-        dealCustomFieldCommercialTraining: CustomField,
-        dealCustomFieldPortfolio: CustomField
-    ): DealUpdateDecoderConfig {
-        return DealUpdateDecoderConfig(
-            dealCustomFieldAccountManger,
-            dealCustomFieldCommercialTraining,
-            dealCustomFieldPortfolio
-        )
-    }
-    @Bean
-    open fun orgDecoderConfig(
-        orgCustomFieldAccountManger: CustomField,
-        orgCustomFieldCommercialTraining: CustomField,
-        orgCustomFieldPortfolio: CustomField
-    ): OrganizationDecoderConfig {
-        return OrganizationDecoderConfig(
-            orgCustomFieldAccountManger,
-            orgCustomFieldCommercialTraining,
-            orgCustomFieldPortfolio
-        )
-    }
 
     @Bean
     open fun orgRepository(
@@ -199,35 +207,6 @@ open class AppConfig {
     }
 
     @Bean
-    open fun useCaseUpdateDeal(
-        dealRepository: DealRepositoryImpl,
-        orgRepository: OrganizationRepositoryImpl,
-        dealDecoderConfig: DealDecoderConfig
-    ): UpdateDealUseCase {
-        return UpdateDealUseCase(dealRepository, orgRepository, dealDecoderConfig)
-    }
-
-
-    @Bean
-    open fun dealsApi(
-        @Value("\${api-client}") apiKey: String,
-        @Value("\${uri-pipedrive}") urlPipedrive: String,
-        dealDecoderConfig: DealDecoderConfig
-    ): DealsApi {
-        return ApiClient("api_key", apiKey)
-            .feignBuilder
-            .decoder(
-                CustomFieldsDecoder(
-                    dealDecoderConfig
-                )
-            )
-            .logger(Logger.ErrorLogger())
-            .logLevel(Logger.Level.FULL)
-            .target(DealsApi::class.java, urlPipedrive)
-    }
-
-
-    @Bean
     open fun dealRepository(
         dealDecoderConfig: DealDecoderConfig,
         dealUpdateDecoderConfig: DealUpdateDecoderConfig,
@@ -235,6 +214,15 @@ open class AppConfig {
         @Value("\${uri-pipedrive}") uriPipedrive: String, dealsApi: DealsApi
     ): DealRepositoryImpl {
         return DealRepositoryImpl(dealDecoderConfig, dealUpdateDecoderConfig, apiKey, uriPipedrive, dealsApi)
+    }
+
+    @Bean
+    open fun useCaseUpdateDeal(
+        dealRepository: DealRepositoryImpl,
+        orgRepository: OrganizationRepositoryImpl,
+        dealDecoderConfig: DealDecoderConfig
+    ): UpdateDealUseCase {
+        return UpdateDealUseCase(dealRepository, orgRepository, dealDecoderConfig)
     }
 
     @Bean

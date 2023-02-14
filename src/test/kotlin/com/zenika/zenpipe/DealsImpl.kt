@@ -20,11 +20,11 @@ class DealsImpl(val deal: Deal, val dealDecoder: DealDecoderConfig, override val
 
         customFields.forEach{item ->
             dealUpdated = when (item.key){
-                dealDecoder.customFieldPortfolioKey -> deal.copy(portfolio = portfolio.copy(key = dealDecoder.customFieldPortfolioKey))
-                dealDecoder.customFieldACommercialTrainingKey -> deal.copy(commercialTraining =
-                        commercialTraining.copy(key = dealDecoder.customFieldACommercialTrainingKey))
-                dealDecoder.customFieldAccountManagerKey -> deal.copy(accountManagerTraining =
-                        accountManagerTraining.copy(key = dealDecoder.customFieldAccountManagerKey))
+                dealDecoder.customFieldPortfolio.key -> deal.copy(portfolio = portfolio.copy(key = dealDecoder.customFieldPortfolio.key))
+                dealDecoder.customFieldCommercialTraining.key -> deal.copy(commercialTraining =
+                        commercialTraining.copy(key = dealDecoder.customFieldCommercialTraining.key))
+                dealDecoder.customFieldAccountManger.key -> deal.copy(accountManagerTraining =
+                        accountManagerTraining.copy(key = dealDecoder.customFieldAccountManger.key))
                 else -> dealUpdated
             }
         }

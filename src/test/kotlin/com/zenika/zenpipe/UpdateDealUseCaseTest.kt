@@ -9,12 +9,16 @@ import org.junit.jupiter.api.Test
 
 class UpdateDealUseCaseTest {
 
-    private val decoderConfig =   DealDecoderConfig("AM Key",
-        "CT key", "PF key" )
+    private val customFieldAccountManger = CustomField(0, "AM", "AM key")
+    private val customFieldACommercialTraining = CustomField(0, "CT", "CT key")
+    private val customFieldPortfolio = CustomField(0, "PF", "PF key")
 
-    private val dealPortfolio = Portfolio(decoderConfig.customFieldPortfolioKey, 1, mapOf())
-    private val dealCommercialTraining = CommercialTraining(decoderConfig.customFieldACommercialTrainingKey, 2, mapOf())
-    private val dealAccountManagerTraining = AccountManagerTraining(decoderConfig.customFieldAccountManagerKey, 3, mapOf())
+    private val decoderConfig =   DealDecoderConfig(customFieldAccountManger,
+        customFieldACommercialTraining, customFieldPortfolio )
+
+    private val dealPortfolio = Portfolio(decoderConfig.customFieldPortfolio.key, 1, mapOf())
+    private val dealCommercialTraining = CommercialTraining(decoderConfig.customFieldCommercialTraining.key, 2, mapOf())
+    private val dealAccountManagerTraining = AccountManagerTraining(decoderConfig.customFieldAccountManger.key, 3, mapOf())
 
     private val orgPortfolio = Portfolio("", 11, mapOf())
     private val orgCommercialTraining = CommercialTraining("", 22, mapOf())
@@ -66,7 +70,7 @@ class UpdateDealUseCaseTest {
         //given
         val organization = Organization(OrganizationId(123))
         val current = Deal(DealId(1), organization.id)
-        val expected = Deal(DealId(1), organization.id, orgPortfolio.copy(key = decoderConfig.customFieldPortfolioKey))
+        val expected = Deal(DealId(1), organization.id, orgPortfolio.copy(key = decoderConfig.customFieldPortfolio.key))
         val updateDealUseCase = UpdateDealUseCase(deals = DealsImpl(current, decoderConfig), organizations = OrganizationsImpl(),
             decoderConfig)
 
@@ -82,7 +86,7 @@ class UpdateDealUseCaseTest {
     fun givenDealAndDealUpdateEvent_WhenUpdateEventWithOrganizationAndPipeLineIdEqualOne_ThenDoNothing() {
         //given
         val current = Deal(DealId(1), OrganizationId(123), null, PipelineId(1))
-        val expected = Deal(DealId(1), OrganizationId(123), orgPortfolio.copy(key = decoderConfig.customFieldPortfolioKey),
+        val expected = Deal(DealId(1), OrganizationId(123), orgPortfolio.copy(key = decoderConfig.customFieldPortfolio.key),
             PipelineId(1))
         val updateDealUseCase = UpdateDealUseCase(deals = DealsImpl(current, decoderConfig), organizations = OrganizationsImpl(),
             decoderConfig)
@@ -119,7 +123,7 @@ class UpdateDealUseCaseTest {
         val expected = Deal(
             DealId(1), OrganizationId(123), orgPortfolio,
             PipelineId(2),
-            orgCommercialTraining.copy(key = decoderConfig.customFieldACommercialTrainingKey),
+            orgCommercialTraining.copy(key = decoderConfig.customFieldCommercialTraining.key),
             orgAccountManagerTraining
         )
         val updateDealUseCase = UpdateDealUseCase(deals = DealsImpl(current, decoderConfig), organizations = OrganizationsImpl(),
@@ -166,7 +170,7 @@ class UpdateDealUseCaseTest {
         )
         val expected = Deal(
             DealId(1), OrganizationId(123), dealPortfolio, PipelineId(2), dealCommercialTraining,
-            orgAccountManagerTraining.copy(key = decoderConfig.customFieldAccountManagerKey)
+            orgAccountManagerTraining.copy(key = decoderConfig.customFieldAccountManger.key)
         )
 
         val updateDealUseCase = UpdateDealUseCase(deals = DealsImpl(current, decoderConfig), organizations = OrganizationsImpl(),

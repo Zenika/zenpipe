@@ -17,7 +17,7 @@ class CustomFieldsKeyChecker(
     val orgCustomFieldPortfolioName: String
 ) {
 
-    fun isKeyUnvalid(): Boolean {
+    fun isKeyInvalid(): Boolean {
         return !(dealCustomFieldAccountManger.name.equals(dealCustomFieldAccountMangerName) &&
                 dealCustomFieldCommercialTraining.name.equals(dealCustomFieldCommercialTrainingName) &&
                 dealCustomFieldPortfolio.name.equals(dealCustomFieldPortfolioName) &&
