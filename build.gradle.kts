@@ -42,6 +42,8 @@ kotlin { // Extension to make an easy setup
     jvmToolchain(17) // Target version of generated JVM bytecode. See 7️⃣
 }
 
-application {
-    mainClass.set("MainKt") // The main class of the application
-}
+/*application {
+    mainClass.set("com.zenika.zenpipe.ZenpipeApplication") // The main class of the application
+}*/
+
+
