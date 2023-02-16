@@ -42,6 +42,12 @@ kotlin { // Extension to make an easy setup
     jvmToolchain(17) // Target version of generated JVM bytecode. See 7️⃣
 }
 
+tasks.register<Copy>("copyJar") {
+    from(layout.buildDirectory.file("libs/zenpipe-1.0-SNAPSHOT.jar"))
+    into(layout.buildDirectory.dir("tmp"))
+}
+tasks.named("build") { finalizedBy("copyJar") }
+
 /*application {
     mainClass.set("com.zenika.zenpipe.ZenpipeApplication") // The main class of the application
 }*/

@@ -2,14 +2,14 @@ version: "3.8"
 services:
   dev:
     build:
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile
     ports:
       - '8080:8080'
     env_file:
       - ./env/dev.env
   prod:
     build:
-      dockerfile: Dockerfile-prod
+      dockerfile: Dockerfile
     ports:
       - '80:8080'
     env_file:
