@@ -1,0 +1,40 @@
+steps:
+  - name: 'eu.gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - '${_GAR_HOSTNAME}/${PROJECT_ID}/${_GAR_REPONAME}/${_IMAGE_NAME}:${_TAG_NAME}'
+      - '.'
+    id: Build
+
+  - name: 'eu.gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '${_GAR_HOSTNAME}/${PROJECT_ID}/${_GAR_REPONAME}/${_IMAGE_NAME}:${_TAG_NAME}'
+    id: Push
+
+  - name: 'eu.gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - '${_SERVICE_NAME}'
+      - '--image'
+      - '${_GAR_HOSTNAME}/${PROJECT_ID}/${_GAR_REPONAME}/${_IMAGE_NAME}:${_TAG_NAME}'
+      - '--region'
+      - '${_DEPLOY_REGION}'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+    id: Deploy
+
+images:
+  - '${_GAR_HOSTNAME}/${PROJECT_ID}/${_GAR_REPONAME}/${_IMAGE_NAME}:${_TAG_NAME}'
+
+substitutions:
+  # _GAR_HOSTNAME: europe-west1-docker.pkg.dev
+  # _GAR_REPONAME: test
+  # _DEPLOY_REGION: europe-west1
+  _IMAGE_NAME: zenpipe
+  _SERVICE_NAME: ${_IMAGE_NAME}
+  _TAG_NAME: latest
