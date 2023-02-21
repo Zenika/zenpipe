@@ -15,7 +15,7 @@ class UpdateDealUseCase constructor(
     fun updateDealProperties(dealId: DealId): Deal {
 
         val currentDeal = deals.findById(dealId)
-        val customFields = currentDeal.enrichIfOrganizationExist(mutableMapOf(), dealConfig, organizations)
+        val customFields = currentDeal.enrichIfOrganizationExist(dealConfig, organizations)
         return if (customFields.isEmpty()) currentDeal else deals.update(dealId, customFields)
     }
 }

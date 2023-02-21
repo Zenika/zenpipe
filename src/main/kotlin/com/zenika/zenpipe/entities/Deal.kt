@@ -11,7 +11,8 @@ data class Deal(
     private val accountManagerTraining: AccountManagerTraining? = null
 ) {
 
-    fun enrichWithPortfolio(
+
+    private fun enrich(
         customFields: MutableMap<String, Int?>,
         dealConfig: DealDecoderConfig,
         organization: Organization
@@ -61,19 +62,18 @@ data class Deal(
     }
 
     fun enrichIfOrganizationExist(
-        customFields: MutableMap<String, Int?>,
         dealConfig: DealDecoderConfig,
         organizations: Organizations
     ): MutableMap<String, Int?> {
 
-        var customFieldsTemp = customFields
+        var customFields = mutableMapOf<String, Int?>()
         if (this.organizationId != null) {
             val organization = organizations.findById(this.organizationId)
             customFieldsTemp = this.enrichWithPortfolio(customFieldsTemp, dealConfig, organization)
             customFieldsTemp = this.enrichIfTrainingPipeline(customFieldsTemp, dealConfig, organization)
         }
 
-        return customFieldsTemp
+        return customFields
     }
 }
 
