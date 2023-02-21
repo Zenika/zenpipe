@@ -24,17 +24,18 @@ class UpdateDealUseCaseTest {
     private val orgCommercialTraining = CommercialTraining("", 22, mapOf())
     private val orgAccountManagerTraining = AccountManagerTraining("", 33, mapOf())
 
+    private val dealId = DealId(1)
     @Test
     fun givenDealAndDealUpdatedEvent_WhenUpdateEventWithoutOrganization_ThenDoNothing() {
 
         // given
-        val current = Deal(DealId(1))
-        val expected = Deal(DealId(1))
+        val current = Deal(dealId)
+        val expected = Deal(dealId)
         val updateDealUseCase = UpdateDealUseCase(deals = DealsImpl(current, decoderConfig), organizations = OrganizationsImpl(),
             decoderConfig)
 
         //when
-        val actual: Deal = updateDealUseCase.updateDealProperties(DealId(1))
+        val actual: Deal = updateDealUseCase.updateDealProperties(dealId)
 
         //then
         Assertions.assertEquals(expected, actual)
@@ -46,18 +47,18 @@ class UpdateDealUseCaseTest {
     fun givenDealAndDealUpdatedEvent_WhenUpdateEventWithOrganizationAndPortfolioIsPresent_ThenDoNotUpDatePortfolio() {
 
         //given
-
+        val dealId = dealId
         val organizations = OrganizationsImpl()
         val organization = organizations.findById(OrganizationId(123))
         val expectPortfolio = organization.portfolio?.copy(key = dealPortfolio.key)
-        val current = Deal(DealId(1), organization.id, expectPortfolio, PipelineId(1))
-        val expected = Deal(DealId(1), organization.id, expectPortfolio, PipelineId(1))
+        val current = Deal(dealId, organization.id, expectPortfolio, PipelineId(1))
+        val expected = Deal(dealId, organization.id, expectPortfolio, PipelineId(1))
         val updateDealUseCase = UpdateDealUseCase(deals = DealsImpl(current, decoderConfig), organizations = OrganizationsImpl(),
             decoderConfig)
 
 
         //when
-        val actual: Deal = updateDealUseCase.updateDealProperties(current.dealId)
+        val actual: Deal = updateDealUseCase.updateDealProperties(dealId)
 
         //then
         Assertions.assertEquals(expected, actual)
@@ -68,14 +69,15 @@ class UpdateDealUseCaseTest {
     @Test
     fun givenDealAndDealUpdatedEvent_WhenUpdateEventWithOrganizationAndPortfolioIsMissing_ThenUpDatePortfolio() {
         //given
+        val dealId = dealId
         val organization = Organization(OrganizationId(123))
-        val current = Deal(DealId(1), organization.id)
-        val expected = Deal(DealId(1), organization.id, orgPortfolio.copy(key = decoderConfig.customFieldPortfolio.key))
+        val current = Deal(dealId, organization.id)
+        val expected = Deal(dealId, organization.id, orgPortfolio.copy(key = decoderConfig.customFieldPortfolio.key))
         val updateDealUseCase = UpdateDealUseCase(deals = DealsImpl(current, decoderConfig), organizations = OrganizationsImpl(),
             decoderConfig)
 
         //when
-        val actual: Deal = updateDealUseCase.updateDealProperties(current.dealId)
+        val actual: Deal = updateDealUseCase.updateDealProperties(dealId)
 
         //then
         Assertions.assertEquals(expected, actual)
@@ -85,14 +87,14 @@ class UpdateDealUseCaseTest {
     @Test
     fun givenDealAndDealUpdateEvent_WhenUpdateEventWithOrganizationAndPipeLineIdEqualOne_ThenDoNothing() {
         //given
-        val current = Deal(DealId(1), OrganizationId(123), null, PipelineId(1))
-        val expected = Deal(DealId(1), OrganizationId(123), orgPortfolio.copy(key = decoderConfig.customFieldPortfolio.key),
+        val current = Deal(dealId, OrganizationId(123), null, PipelineId(1))
+        val expected = Deal(dealId, OrganizationId(123), orgPortfolio.copy(key = decoderConfig.customFieldPortfolio.key),
             PipelineId(1))
         val updateDealUseCase = UpdateDealUseCase(deals = DealsImpl(current, decoderConfig), organizations = OrganizationsImpl(),
             decoderConfig)
 
         //when
-        val actual: Deal = updateDealUseCase.updateDealProperties(current.dealId)
+        val actual: Deal = updateDealUseCase.updateDealProperties(dealId)
 
         //then
         Assertions.assertEquals(expected, actual)
@@ -102,14 +104,14 @@ class UpdateDealUseCaseTest {
     fun givenDealAndDealUpdateEvent_WhenUpdateEventWithOrganizationAndPipeLineIdEqualTwoAndCommercialTrainingIsPresent_ThenDoNothing() {
         //given
         val current =
-            Deal(DealId(1), OrganizationId(123), orgPortfolio, PipelineId(2), orgCommercialTraining, orgAccountManagerTraining)
+            Deal(dealId, OrganizationId(123), orgPortfolio, PipelineId(2), orgCommercialTraining, orgAccountManagerTraining)
         val expected =
-            Deal(DealId(1), OrganizationId(123), orgPortfolio, PipelineId(2), orgCommercialTraining, orgAccountManagerTraining)
+            Deal(dealId, OrganizationId(123), orgPortfolio, PipelineId(2), orgCommercialTraining, orgAccountManagerTraining)
         val updateDealUseCase = UpdateDealUseCase(deals = DealsImpl(current, decoderConfig), organizations = OrganizationsImpl(),
             decoderConfig)
 
         //when
-        val actual: Deal = updateDealUseCase.updateDealProperties(current.dealId)
+        val actual: Deal = updateDealUseCase.updateDealProperties(dealId)
 
         //then
         Assertions.assertEquals(expected, actual)
@@ -119,9 +121,9 @@ class UpdateDealUseCaseTest {
     @Test
     fun givenDealAndDealUpdateEvent_WhenUpdateEventWithOrganizationAndPipeLineIdEqualTwoAndCommercialTrainingIsMissing_ThenUpdateDeal() {
         //given
-        val current = Deal(DealId(1), OrganizationId(123), orgPortfolio, PipelineId(2), null, orgAccountManagerTraining)
+        val current = Deal(dealId, OrganizationId(123), orgPortfolio, PipelineId(2), null, orgAccountManagerTraining)
         val expected = Deal(
-            DealId(1), OrganizationId(123), orgPortfolio,
+            dealId, OrganizationId(123), orgPortfolio,
             PipelineId(2),
             orgCommercialTraining.copy(key = decoderConfig.customFieldCommercialTraining.key),
             orgAccountManagerTraining
@@ -130,7 +132,7 @@ class UpdateDealUseCaseTest {
             decoderConfig)
 
         //when
-        val actual: Deal = updateDealUseCase.updateDealProperties(current.dealId)
+        val actual: Deal = updateDealUseCase.updateDealProperties(dealId)
 
         //then
         Assertions.assertEquals(expected, actual)
@@ -141,11 +143,11 @@ class UpdateDealUseCaseTest {
 
         //given
         val current = Deal(
-            DealId(1), OrganizationId(123), orgPortfolio, PipelineId(2),
+            dealId, OrganizationId(123), orgPortfolio, PipelineId(2),
             orgCommercialTraining, dealAccountManagerTraining
         )
         val expected = Deal(
-            DealId(1), OrganizationId(123), orgPortfolio, PipelineId(2),
+            dealId, OrganizationId(123), orgPortfolio, PipelineId(2),
             orgCommercialTraining,
             dealAccountManagerTraining
         )
@@ -154,7 +156,7 @@ class UpdateDealUseCaseTest {
             decoderConfig)
 
         //when
-        val actual: Deal = updateDealUseCase.updateDealProperties(current.dealId)
+        val actual: Deal = updateDealUseCase.updateDealProperties(dealId)
 
         //then
         Assertions.assertEquals(expected, actual)
@@ -165,11 +167,11 @@ class UpdateDealUseCaseTest {
     fun givenDealAndDealUpdateEvent_WhenUpdateEventWithOrganizationAndPipeLineIdEqualTwoAndAccountManagerTrainingIsMissing_ThenUpdateDeal() {
         //given
         val current = Deal(
-            DealId(1), OrganizationId(123), dealPortfolio, PipelineId(2),
+            dealId, OrganizationId(123), dealPortfolio, PipelineId(2),
             dealCommercialTraining, null
         )
         val expected = Deal(
-            DealId(1), OrganizationId(123), dealPortfolio, PipelineId(2), dealCommercialTraining,
+            dealId, OrganizationId(123), dealPortfolio, PipelineId(2), dealCommercialTraining,
             orgAccountManagerTraining.copy(key = decoderConfig.customFieldAccountManger.key)
         )
 
@@ -177,7 +179,7 @@ class UpdateDealUseCaseTest {
             decoderConfig)
 
         //when
-        val actual: Deal = updateDealUseCase.updateDealProperties(current.dealId)
+        val actual: Deal = updateDealUseCase.updateDealProperties(dealId)
 
         //then
         Assertions.assertEquals(expected, actual)
