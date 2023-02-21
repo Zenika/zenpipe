@@ -26,7 +26,6 @@ data class Deal(
         }
     }
 
-
     private fun enrichIfTrainingPipeline(
         customFields: Map<String, Int?>,
         dealConfig: DealDecoderConfig
@@ -71,5 +70,3 @@ data class Deal(
         }
     }
 }
-
-

@@ -110,13 +110,6 @@ fun DealNonStrictWithDetails.toDeal(
 
 }
 
-fun <T> extractOrganizationId(t: T): OrganizationId {
-    return when (t) {
-        is DealNonStrictWithDetails -> OrganizationId(t.orgId?.value!!)
-        is DealResponse200Data -> OrganizationId(t.orgId?.value!!)
-        else -> throw RuntimeException("Type not managed !")
-    }
-}
 
 fun <T> extractPortfolio(t: T, dealCustomFieldPortfolioKey: String): Portfolio? {
     return when (t) {

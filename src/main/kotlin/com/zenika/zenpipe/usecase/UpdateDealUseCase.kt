@@ -4,7 +4,6 @@ import com.zenika.zenpipe.decoder.DealDecoderConfig
 import com.zenika.zenpipe.entities.Deal
 import com.zenika.zenpipe.entities.DealId
 import com.zenika.zenpipe.entities.Deals
-import com.zenika.zenpipe.entities.Organizations
 
 
 class UpdateDealUseCase constructor(
