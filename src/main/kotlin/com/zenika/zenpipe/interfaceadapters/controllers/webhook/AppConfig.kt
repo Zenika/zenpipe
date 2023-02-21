@@ -7,6 +7,7 @@ import com.zenika.pipedrive.api.OrganizationsApi
 import com.zenika.pipedrive.invoker.ApiClient
 import com.zenika.zenpipe.decoder.*
 import com.zenika.zenpipe.entities.CustomField
+import com.zenika.zenpipe.entities.Organizations
 import com.zenika.zenpipe.interfaceadapters.gateways.DealRepositoryImpl
 import com.zenika.zenpipe.interfaceadapters.gateways.OrganizationRepositoryImpl
 import com.zenika.zenpipe.usecase.UpdateDealUseCase
@@ -211,18 +212,18 @@ open class AppConfig {
         dealDecoderConfig: DealDecoderConfig,
         dealUpdateDecoderConfig: DealUpdateDecoderConfig,
         @Value("\${api-client}") apiKey: String,
-        @Value("\${uri-pipedrive}") uriPipedrive: String, dealsApi: DealsApi
+        @Value("\${uri-pipedrive}") uriPipedrive: String, dealsApi: DealsApi,
+        organizations: Organizations
     ): DealRepositoryImpl {
-        return DealRepositoryImpl(dealDecoderConfig, dealUpdateDecoderConfig, apiKey, uriPipedrive, dealsApi)
+        return DealRepositoryImpl(dealDecoderConfig, dealUpdateDecoderConfig, apiKey, uriPipedrive, dealsApi, organizations)
     }
 
     @Bean
     open fun useCaseUpdateDeal(
         dealRepository: DealRepositoryImpl,
-        orgRepository: OrganizationRepositoryImpl,
         dealDecoderConfig: DealDecoderConfig
     ): UpdateDealUseCase {
-        return UpdateDealUseCase(dealRepository, orgRepository, dealDecoderConfig)
+        return UpdateDealUseCase(dealRepository, dealDecoderConfig)
     }
 
     @Bean

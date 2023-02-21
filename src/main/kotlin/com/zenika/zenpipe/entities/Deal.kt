@@ -4,7 +4,7 @@ import com.zenika.zenpipe.decoder.DealDecoderConfig
 
 data class Deal(
     private val dealId: DealId,
-    private val organizationId: OrganizationId? = null,
+    private val organization: Organization? = null,
     private val portfolio: Portfolio? = null,
     private val pipelineId: PipelineId? = null,
     private val commercialTraining: CommercialTraining? = null,
@@ -29,14 +29,13 @@ data class Deal(
 
     private fun enrichIfTrainingPipeline(
         customFields: Map<String, Int?>,
-        dealConfig: DealDecoderConfig,
-        organization: Organization
+        dealConfig: DealDecoderConfig
     ): Map<String, Int?> {
 
         val extractCommercialTrainingKey = { dealConfig.customFieldCommercialTraining.key }
         val extractAccountManagerKey = { dealConfig.customFieldAccountManger.key }
-        val extractCommercialTrainingId = { organization.commercialTraining?.id }
-        val extractAccountManagerId = { organization.accountManagerTraining?.id }
+        val extractCommercialTrainingId = { this.organization?.commercialTraining?.id }
+        val extractAccountManagerId = { this.organization?.accountManagerTraining?.id }
         val isCommercialTrainingNull = { this.commercialTraining == null }
         val isAccountManagerNull = { this.accountManagerTraining == null }
 
@@ -56,17 +55,16 @@ data class Deal(
 
     fun enrichIfOrganizationExist(
         dealConfig: DealDecoderConfig,
-        organizations: Organizations
     ): Map<String, Int?> {
 
-        return if (this.organizationId != null) {
-            val organization = organizations.findById(this.organizationId)
+        return if (this.organization != null) {
             this.enrichIfTrainingPipeline(
                 this.enrich(
                     mapOf(),
                     { dealConfig.customFieldPortfolio.key },
-                    { organization.portfolio?.id },
-                    { this.portfolio == null }), dealConfig, organization
+                    { this.organization.portfolio?.id },
+                    { this.portfolio == null }),
+                    dealConfig
             )
         } else {
             mapOf()

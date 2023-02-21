@@ -4,7 +4,8 @@ import com.zenika.pipedrive.api.DealsApi
 import com.zenika.zenpipe.decoder.DealDecoderConfig
 import com.zenika.zenpipe.entities.*
 
-class DealsImpl(val deal: Deal, val dealDecoder: DealDecoderConfig, override val dealsApi: DealsApi? = null) : Deals {
+class DealsImpl(val deal: Deal, val dealDecoder: DealDecoderConfig, override val dealsApi: DealsApi? = null,
+                override val organizations: Organizations?= null) : Deals {
 
     private val portfolio = Portfolio("portFolio2", 11, mapOf())
     private val commercialTraining = CommercialTraining("CT2", 22, mapOf())

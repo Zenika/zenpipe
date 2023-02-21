@@ -15,7 +15,8 @@ class DealRepositoryImpl(
     dealCustomFields: DealDecoderConfig,
     dealUpdateDecoderConfig: DealUpdateDecoderConfig,
     apiKey: String, uriPipedrive: String,
-    override val dealsApi: DealsApi
+    override val dealsApi: DealsApi,
+    override val organizations: Organizations
 ) : Deals {
 
     private val dealCustomFieldAccountManagerKey: String =
@@ -31,10 +32,17 @@ class DealRepositoryImpl(
 
     override fun findById(dealId: DealId): Deal {
 
-        val dealRes = dealsApi.getDeal(dealId.value).data
-
-        return dealRes!!.toDeal(
-            dealId,
+        val deal = dealsApi.getDeal(dealId.value)
+        val data = deal.data
+        val organizationId = data?.orgId?.value?.let {
+            OrganizationId(it)
+        }
+        val organization = organizationId?.let {
+            organizations.findById(it)
+        }
+        return data!!.toDeal(
+            dealId = dealId,
+            organization,
             dealCustomFieldPortfolioKey,
             dealCustomFieldACommercialTrainingKey,
             dealCustomFieldAccountManagerKey
@@ -74,25 +82,26 @@ fun DealResponse200Data.toDeal(
 ): Deal {
 
     return Deal(
-        dealId,
-        extractOrganizationId(this),
-        extractPortfolio(this, dealCustomFieldPortfolioKey),
-        extractPipelineId(this),
-        extractCommercialTraining(this, dealCustomFieldACommercialTrainingKey),
-        extractAccountManger(this, dealCustomFieldAccountManagerKey)
+        dealId = dealId,
+        portfolio = extractPortfolio(this, dealCustomFieldPortfolioKey),
+        pipelineId = extractPipelineId(this),
+        commercialTraining = extractCommercialTraining(this, dealCustomFieldACommercialTrainingKey),
+        accountManagerTraining = extractAccountManger(this, dealCustomFieldAccountManagerKey)
     )
 
 }
 
 fun DealNonStrictWithDetails.toDeal(
-    dealId: DealId, dealCustomFieldPortfolioKey: String,
+    dealId: DealId,
+    organization: Organization?,
+    dealCustomFieldPortfolioKey: String,
     dealCustomFieldAccountManagerKey: String,
     dealCustomFieldACommercialTrainingKey: String
 ): Deal {
 
     return Deal(
         dealId,
-        extractOrganizationId(this),
+        organization,
         extractPortfolio(this, dealCustomFieldPortfolioKey),
         extractPipelineId(this),
         extractCommercialTraining(this, dealCustomFieldACommercialTrainingKey),

@@ -8,14 +8,13 @@ import com.zenika.zenpipe.entities.Organizations
 
 
 class UpdateDealUseCase constructor(
-    private val deals: Deals, private val organizations: Organizations,
+    private val deals: Deals,
     private val dealConfig: DealDecoderConfig
 ) {
 
     fun updateDealProperties(dealId: DealId): Deal {
-
         val currentDeal = deals.findById(dealId)
-        val customFields = currentDeal.enrichIfOrganizationExist(dealConfig, organizations)
+        val customFields = currentDeal.enrichIfOrganizationExist(dealConfig)
         return if (customFields.isEmpty()) currentDeal else deals.update(dealId, customFields)
     }
 }
