@@ -11,69 +11,66 @@ data class Deal(
     private val accountManagerTraining: AccountManagerTraining? = null
 ) {
 
+    private fun isPipelineTraining(): Boolean = this.pipelineId?.value == 2
 
     private fun enrich(
-        customFields: MutableMap<String, Int?>,
-        dealConfig: DealDecoderConfig,
-        organization: Organization
-    ): MutableMap<String, Int?> {
-        if (this.portfolio == null) {
-            customFields[dealConfig.customFieldPortfolio.key] = organization.portfolio?.id
+        customFields: Map<String, Int?>,
+        extractKey: () -> String,
+        extractValue: () -> Int?,
+        isNull: () -> Boolean
+    ): Map<String, Int?> {
+        return if (isNull()) {
+            customFields + (extractKey() to extractValue())
+        } else {
+            customFields
         }
-        return customFields
     }
 
-    private fun enrichWithCommercialTraining(
-        customFields: MutableMap<String, Int?>,
-        dealConfig: DealDecoderConfig,
-        organization: Organization
-    ): MutableMap<String, Int?> {
-        if (this.commercialTraining == null) {
-            customFields[dealConfig.customFieldCommercialTraining.key] = organization.commercialTraining?.id
-        }
-        return customFields
-    }
-
-    private fun enrichWithAccountManager(
-        customFields: MutableMap<String, Int?>,
-        dealConfig: DealDecoderConfig,
-        organization: Organization
-    ): MutableMap<String, Int?> {
-        if (this.accountManagerTraining == null) {
-            customFields[dealConfig.customFieldAccountManger.key] = organization.accountManagerTraining?.id
-        }
-        return customFields
-    }
 
     private fun enrichIfTrainingPipeline(
-        customFields: MutableMap<String, Int?>,
+        customFields: Map<String, Int?>,
         dealConfig: DealDecoderConfig,
         organization: Organization
-    ): MutableMap<String, Int?> {
-        var customFieldsTemp = customFields
+    ): Map<String, Int?> {
 
-        if (this.pipelineId?.value == 2) {
-            customFieldsTemp = this.enrichWithCommercialTraining(customFieldsTemp, dealConfig, organization)
-            customFieldsTemp = this.enrichWithAccountManager(customFieldsTemp, dealConfig, organization)
+        val extractCommercialTrainingKey = { dealConfig.customFieldCommercialTraining.key }
+        val extractAccountManagerKey = { dealConfig.customFieldAccountManger.key }
+        val extractCommercialTrainingId = { organization.commercialTraining?.id }
+        val extractAccountManagerId = { organization.accountManagerTraining?.id }
+        val isCommercialTrainingNull = { this.commercialTraining == null }
+        val isAccountManagerNull = { this.accountManagerTraining == null }
 
+        return if (this.isPipelineTraining()) {
+            this.enrich(
+                this.enrich(
+                    customFields,
+                    extractCommercialTrainingKey,
+                    extractCommercialTrainingId,
+                    isCommercialTrainingNull
+                ), extractAccountManagerKey, extractAccountManagerId, isAccountManagerNull
+            )
+        } else {
+            customFields
         }
-        return customFieldsTemp
-
     }
 
     fun enrichIfOrganizationExist(
         dealConfig: DealDecoderConfig,
         organizations: Organizations
-    ): MutableMap<String, Int?> {
+    ): Map<String, Int?> {
 
-        var customFields = mutableMapOf<String, Int?>()
-        if (this.organizationId != null) {
+        return if (this.organizationId != null) {
             val organization = organizations.findById(this.organizationId)
-            customFieldsTemp = this.enrichWithPortfolio(customFieldsTemp, dealConfig, organization)
-            customFieldsTemp = this.enrichIfTrainingPipeline(customFieldsTemp, dealConfig, organization)
+            this.enrichIfTrainingPipeline(
+                this.enrich(
+                    mapOf(),
+                    { dealConfig.customFieldPortfolio.key },
+                    { organization.portfolio?.id },
+                    { this.portfolio == null }), dealConfig, organization
+            )
+        } else {
+            mapOf()
         }
-
-        return customFields
     }
 }
 
