@@ -9,6 +9,10 @@ class DealDecoderConfig(
     val customFieldPortfolio: CustomField
 ) : DecoderConfig {
 
+    fun extractPortfolioKey(): String = this.customFieldPortfolio.key
+    fun extractCommercialTrainingKey(): String = this.customFieldCommercialTraining.key
+    fun extractAccountManagerKey(): String = this.customFieldAccountManger.key
+
     override fun createConfig(): Map<String, SetCustomFields> {
 
         val setAccountManager: SetCustomFields = { key, objectResponse, jsonNode, getCustomFields ->
