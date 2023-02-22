@@ -32,6 +32,8 @@ dependencies { // All the libraries you want to use. See 4️⃣
     implementation("org.springframework.cloud:spring-cloud-starter-bootstrap:4.0.1")
 
     testImplementation(kotlin("test")) // The Kotlin test library
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.0.2")
+
 }
 
 kotlin { // Extension to make an easy setup

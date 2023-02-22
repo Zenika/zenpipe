@@ -2,6 +2,7 @@ package com.zenika.zenpipe.interfaceadapters.gateways.jackson.decoder
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.zenika.pipedrive.decoder.ZenJacksonDecoder
 import feign.Response
 import feign.Util
@@ -9,7 +10,7 @@ import org.openapitools.jackson.nullable.JsonNullableModule
 import java.io.BufferedReader
 import java.lang.reflect.Type
 
-class CustomFieldsDecoder constructor(private val decoderConfig: DecoderConfig): ZenJacksonDecoder(mutableListOf(JsonNullableModule())) {
+class CustomFieldsDecoder constructor(private val decoderConfig: DecoderConfig): ZenJacksonDecoder(mutableListOf(JsonNullableModule(), JavaTimeModule())) {
 
 
     override fun decode(response: Response?, type: Type?): Any? {
