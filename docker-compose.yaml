@@ -5,13 +5,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - '8080:8080'
-    env_file:
-      - ./env/dev.env
-  prod:
-    build:
-      dockerfile: Dockerfile
-    ports:
-      - '80:8080'
-    env_file:
-      - ./env/prod.env
+    environment:
+      - PATH_CONFIG_ZENPIPE=${pwd}/config
+      - API_KEY=0c954df5e04eb173e3f1dad6b5dbbf61e4a0d03b
+      - PROFILE=dev
 

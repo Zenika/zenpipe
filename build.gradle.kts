@@ -52,11 +52,13 @@ tasks.jar {
     // Remove `plain` postfix from jar file name
     archiveClassifier.set("")
 }
+/*
+
+tasks.bootJar {
+    enabled = false
+}
+ */
 
 //tasks.named("build") { finalizedBy("copyJar") }
-
-/*application {
-    mainClass.set("com.zenika.zenpipe.ZenpipeApplication") // The main class of the application
-}*/
 
 
