@@ -1,6 +1,6 @@
 package com.zenika.zenpipe
 
-import com.zenika.zenpipe.decoder.DealDecoderConfig
+import com.zenika.zenpipe.interfaceadapters.gateways.jackson.decoder.DealDecoderConfig
 import com.zenika.zenpipe.entities.*
 import com.zenika.zenpipe.usecase.UpdateDealUseCase
 import org.junit.jupiter.api.Assertions

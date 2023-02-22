@@ -1,4 +1,4 @@
-package com.zenika.zenpipe.decoder
+package com.zenika.zenpipe.interfaceadapters.gateways.jackson.decoder
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode

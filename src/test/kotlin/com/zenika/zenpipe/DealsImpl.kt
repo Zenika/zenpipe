@@ -1,7 +1,7 @@
 package com.zenika.zenpipe
 
 import com.zenika.pipedrive.api.DealsApi
-import com.zenika.zenpipe.decoder.DealDecoderConfig
+import com.zenika.zenpipe.interfaceadapters.gateways.jackson.decoder.DealDecoderConfig
 import com.zenika.zenpipe.entities.*
 
 class DealsImpl(val deal: Deal, val dealDecoder: DealDecoderConfig, override val dealsApi: DealsApi? = null,

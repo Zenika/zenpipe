@@ -5,11 +5,14 @@ import com.zenika.pipedrive.api.DealsApi
 import com.zenika.pipedrive.api.OrganizationFieldsApi
 import com.zenika.pipedrive.api.OrganizationsApi
 import com.zenika.pipedrive.invoker.ApiClient
-import com.zenika.zenpipe.decoder.*
 import com.zenika.zenpipe.entities.CustomField
 import com.zenika.zenpipe.entities.Organizations
-import com.zenika.zenpipe.interfaceadapters.gateways.DealRepositoryImpl
-import com.zenika.zenpipe.interfaceadapters.gateways.OrganizationRepositoryImpl
+import com.zenika.zenpipe.interfaceadapters.gateways.api.rest.DealRepositoryImpl
+import com.zenika.zenpipe.interfaceadapters.gateways.api.rest.OrganizationPipedriveRestApi
+import com.zenika.zenpipe.interfaceadapters.gateways.jackson.decoder.CustomFieldsDecoder
+import com.zenika.zenpipe.interfaceadapters.gateways.jackson.decoder.DealDecoderConfig
+import com.zenika.zenpipe.interfaceadapters.gateways.jackson.decoder.DealUpdateDecoderConfig
+import com.zenika.zenpipe.interfaceadapters.gateways.jackson.decoder.OrganizationDecoderConfig
 import com.zenika.zenpipe.usecase.UpdateDealUseCase
 import feign.Logger
 import org.springframework.beans.factory.annotation.Value
@@ -203,8 +206,8 @@ open class AppConfig {
     open fun orgRepository(
         orgDecoderConfig: OrganizationDecoderConfig,
         organizationsApi: OrganizationsApi
-    ): OrganizationRepositoryImpl {
-        return OrganizationRepositoryImpl(orgDecoderConfig, organizationsApi)
+    ): OrganizationPipedriveRestApi {
+        return OrganizationPipedriveRestApi(orgDecoderConfig, organizationsApi)
     }
 
     @Bean

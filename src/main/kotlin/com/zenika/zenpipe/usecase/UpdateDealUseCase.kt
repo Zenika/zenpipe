@@ -1,6 +1,6 @@
 package com.zenika.zenpipe.usecase
 
-import com.zenika.zenpipe.decoder.DealDecoderConfig
+import com.zenika.zenpipe.interfaceadapters.gateways.jackson.decoder.DealDecoderConfig
 import com.zenika.zenpipe.entities.Deal
 import com.zenika.zenpipe.entities.DealId
 import com.zenika.zenpipe.entities.Deals

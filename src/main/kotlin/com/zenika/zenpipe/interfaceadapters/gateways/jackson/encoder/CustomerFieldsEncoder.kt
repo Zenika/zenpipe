@@ -1,4 +1,4 @@
-package com.zenika.zenpipe.decoder
+package com.zenika.zenpipe.interfaceadapters.gateways.jackson.encoder
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.node.ObjectNode

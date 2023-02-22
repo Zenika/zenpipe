@@ -1,13 +1,16 @@
-package com.zenika.zenpipe.interfaceadapters.gateways
+package com.zenika.zenpipe.interfaceadapters.gateways.api.rest
 
 import com.zenika.pipedrive.api.DealsApi
 import com.zenika.pipedrive.invoker.ApiClient
 import com.zenika.pipedrive.model.DealNonStrictWithDetails
 import com.zenika.pipedrive.model.DealResponse200Data
 import com.zenika.pipedrive.model.UpdateDealRequest
-import com.zenika.zenpipe.decoder.*
 import com.zenika.zenpipe.entities.*
 import com.zenika.zenpipe.entities.Deals
+import com.zenika.zenpipe.interfaceadapters.gateways.jackson.decoder.CustomFieldsDecoder
+import com.zenika.zenpipe.interfaceadapters.gateways.jackson.encoder.CustomerFieldsEncoder
+import com.zenika.zenpipe.interfaceadapters.gateways.jackson.decoder.DealDecoderConfig
+import com.zenika.zenpipe.interfaceadapters.gateways.jackson.decoder.DealUpdateDecoderConfig
 import feign.Logger
 import java.lang.RuntimeException
 

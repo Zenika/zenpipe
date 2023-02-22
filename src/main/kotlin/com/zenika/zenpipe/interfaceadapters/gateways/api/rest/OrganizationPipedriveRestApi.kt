@@ -1,10 +1,10 @@
-package com.zenika.zenpipe.interfaceadapters.gateways
+package com.zenika.zenpipe.interfaceadapters.gateways.api.rest
 
 import com.zenika.pipedrive.api.OrganizationsApi
-import com.zenika.zenpipe.decoder.OrganizationDecoderConfig
+import com.zenika.zenpipe.interfaceadapters.gateways.jackson.decoder.OrganizationDecoderConfig
 import com.zenika.zenpipe.entities.*
 
-class OrganizationRepositoryImpl constructor(
+class OrganizationPipedriveRestApi constructor(
     orgCustomFields: OrganizationDecoderConfig,
     override val organizationsApi: OrganizationsApi
 ) : Organizations {
