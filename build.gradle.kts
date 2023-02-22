@@ -34,10 +34,6 @@ dependencies { // All the libraries you want to use. See 4️⃣
     testImplementation(kotlin("test")) // The Kotlin test library
 }
 
-tasks.test { // See 5️⃣
-    useJUnitPlatform() // JUnitPlatform for tests. See 6️⃣
-}
-
 kotlin { // Extension to make an easy setup
     jvmToolchain(17) // Target version of generated JVM bytecode. See 7️⃣
 }
@@ -46,4 +42,35 @@ tasks.jar {
     enabled = true
     // Remove `plain` postfix from jar file name
     archiveClassifier.set("")
+}
+
+// tout les fichier qui termine par integrationtest, ne dois pas etre mancer via la cmd gradle test
+
+
+sourceSets {
+    create("integrationTest") {
+        kotlin.srcDir("src/test/kotlin")
+        resources.srcDir("src/test/resources")
+        compileClasspath += sourceSets["main"].output + configurations["testRuntimeClasspath"]
+        runtimeClasspath += output + compileClasspath + sourceSets["test"].runtimeClasspath
+    }
+}
+
+task<Test>("integrationTest") {
+    description = "Runs the integration tests"
+    group = "verification"
+    testClassesDirs = sourceSets["integrationTest"].output.classesDirs
+    classpath = sourceSets["integrationTest"].runtimeClasspath
+    useJUnitPlatform()
+    filter {
+        includeTestsMatching("*IntegrationTest")
+    }
+}
+
+
+tasks.test { // See 5️⃣
+    useJUnitPlatform() // JUnitPlatform for tests. See 6️⃣
+    filter {
+        excludeTestsMatching("*IntegrationTest")
+    }
 }
