@@ -14,7 +14,7 @@ import com.zenika.zenpipe.interfaceadapters.gateways.jackson.decoder.DealUpdateD
 import feign.Logger
 import java.lang.RuntimeException
 
-class DealRepositoryImpl(
+class DealPipedriveRestApi(
     dealCustomFields: DealDecoderConfig,
     dealUpdateDecoderConfig: DealUpdateDecoderConfig,
     apiKey: String, uriPipedrive: String,

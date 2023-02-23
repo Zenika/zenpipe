@@ -5,13 +5,13 @@ import java.util.Optional
 
 data class Deal(
     private val dealId: DealId,
-    private val organization: Organization? = null,
-    private val portfolio: Portfolio? = null,
+    val organization: Organization? = null,
+    val portfolio: Portfolio? = null,
     private val pipelineId: PipelineId? = null,
-    private val commercialTraining: CommercialTraining? = null,
-    private val accountManagerTraining: AccountManagerTraining? = null
+    val commercialTraining: CommercialTraining? = null,
+    val accountManagerTraining: AccountManagerTraining? = null
 ) {
-    private fun extractPortfolioId(): Int? = this.portfolio?.id
+    private fun extractPortfolioId(): Int? = this.organization?.portfolio?.id
     private fun extractCommercialTrainingId(): Int? = this.organization?.commercialTraining?.id
     private fun extractAccountManagerId(): Int? = this.organization?.accountManagerTraining?.id
 
