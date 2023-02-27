@@ -1,13 +1,13 @@
 package com.zenika.zenpipe.entities
 
 import com.zenika.zenpipe.interfaceadapters.gateways.jackson.decoder.DealDecoderConfig
-import java.util.Optional
+import java.util.*
 
 data class Deal(
-    private val dealId: DealId,
+    val dealId: DealId,
     val organization: Organization? = null,
     val portfolio: Portfolio? = null,
-    private val pipelineId: PipelineId? = null,
+    val pipelineId: PipelineId? = null,
     val commercialTraining: CommercialTraining? = null,
     val accountManagerTraining: AccountManagerTraining? = null
 ) {

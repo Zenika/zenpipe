@@ -30,10 +30,17 @@ dependencies { // All the libraries you want to use. See 4️⃣
     implementation("org.springframework.cloud:spring-cloud-config-server:4.0.1")
     implementation("org.springframework.cloud:spring-cloud-starter-config:4.0.1")
     implementation("org.springframework.cloud:spring-cloud-starter-bootstrap:4.0.1")
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign:4.0.1")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
+
+    implementation("io.cucumber:cucumber-spring:7.11.1")
+
 
     testImplementation(kotlin("test")) // The Kotlin test library
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.0.2")
-
+    testImplementation("io.cucumber:cucumber-java:7.11.1")
+    testImplementation("io.cucumber:cucumber-junit:7.11.1")
+    testImplementation("io.github.openfeign:feign-okhttp")
 }
 
 kotlin { // Extension to make an easy setup
