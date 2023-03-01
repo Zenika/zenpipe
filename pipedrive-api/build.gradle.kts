@@ -42,20 +42,20 @@ tasks.getByName<Test>("test") {
     useJUnitPlatform()
 }
 
-tasks.register<Delete>("cleanSource") {
+/*tasks.register<Delete>("cleanSource") {
     delete("$projectDir/src/main/java")
-}
+}*/
 
 tasks.register<Delete>("generateSource") {
     delete("$buildDir/generated")
-    dependsOn("copySource")
+    //dependsOn("copySource")
 }
 
-tasks.register<Copy>("copySource") {
+/*tasks.register<Copy>("copySource") {
     from(layout.buildDirectory.dir("generated/src/main/java"))
     into(layout.projectDirectory.dir("src/main/java"))
     dependsOn("cleanSource")
-}
+}*/
 
 openApiGenerate {
     generatorName.set("java")
