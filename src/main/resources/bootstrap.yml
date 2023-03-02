@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: zenpipe-config
+  profiles:
+    active: composite,prod
+  cloud:
+    config:
+      server:
+        composite:
+          -
+            type: native
+            search-locations: ${PATH_CONFIG_ZENPIPE}
+        bootstrap: true
+
