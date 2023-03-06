@@ -3,10 +3,9 @@ services:
   dev:
     build:
       dockerfile: Dockerfile
-    ports:
-      - '8080:8080'
     environment:
       - PATH_CONFIG_ZENPIPE=${pwd}/config
-      - API_KEY=0c954df5e04eb173e3f1dad6b5dbbf61e4a0d03b
+      - API_KEY=
       - PROFILE=dev
+      - PORT_TOMCAT=57892
 
