@@ -21,8 +21,6 @@ steps:
       - '${_SERVICE_NAME}'
       - '--image'
       - '${_GAR_HOSTNAME}/${PROJECT_ID}/${_GAR_REPONAME}/${_IMAGE_NAME}:${_TAG_NAME}'
-      - '--port'
-      - '${_PORT}'
       - '--region'
       - '${_DEPLOY_REGION}'
       - '--platform'
