@@ -26,6 +26,10 @@ steps:
       - '--platform'
       - 'managed'
       - '--allow-unauthenticated'
+      - '--port'
+      - '57892'
+      - '--timeout'
+      - '300'
     id: Deploy
 
 images:
