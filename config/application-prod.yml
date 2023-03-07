@@ -1,22 +1,22 @@
 deal:
   commercial-training:
-    name:
-    id :
+    name: Commercial Training [Datalink]
+    id: 12514
   account-manager:
-    name:
-    id:
+    name: Account Manager Training [Datalink]
+    id: 12511
   portfolio:
-    name:
-    id:
+    name: Portfolio [Datalink]
+    id: 12515
 org:
   commercial-training:
-    name:
-    id:
+    name: Commercial Training
+    id: 4023
   account-manager:
-    name:
-    id:
+    name: Account Manager Training
+    id: 4022
   portfolio:
-    name:
-    id:
-api-client: ${API_name}
-uri-pipedrive: https://zenika-sandbox.pipedrive.com/v1/
+    name: Customer Portfolio
+    id: 4025
+api-client: ${API_KEY}
+uri-pipedrive: https://zenika.pipedrive.com/v1/
